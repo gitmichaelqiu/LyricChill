@@ -507,49 +507,20 @@ struct MenubarWindowView: View {
     }
     
     @ViewBuilder
-    var otherOptions: some View {
-        Button("Settings…") {
-            dismiss()
-            LyricChillSettingsWindowController.shared.open(viewModel: viewmodel)
-        }.keyboardShortcut("s")
-    }
-    
-    @ViewBuilder
     var systemControlView: some View {
         HStack {
-            if #available(macOS 26.0, *) {
-                Menu {
-                    otherOptions
-//                        .foregroundStyle(viewmodel.currentBackground ?? .primary)
-                } label: {
-
-                        Text("...")
-                }
-                .menuIndicator(.hidden)
-                .onHover { isHovering in
-                    if isHovering {
-                        currentHoveredItem = .moreOptions
-                    } else {
-                        currentHoveredItem = .none
-                    }
-                }
-            } else {
-                Menu {
-                    otherOptions
-                        .foregroundStyle(viewmodel.currentBackground ?? .primary)
-                } label: {
-
-                        Text("...")
-                }
-                .frame(width: 30)
-                .menuIndicator(.hidden)
-                .onHover { isHovering in
-                    if isHovering {
-                        currentHoveredItem = .moreOptions
-                    } else {
-                        currentHoveredItem = .none
-                    }
-                }
+            Button {
+                dismiss()
+                LyricChillSettingsWindowController.shared.open(viewModel: viewmodel)
+            } label: {
+                Text("...")
+            }
+            .frame(width: 30)
+            .keyboardShortcut("s")
+            .help("Settings")
+            .accessibilityLabel("Settings")
+            .onHover { isHovering in
+                currentHoveredItem = isHovering ? .settings : .none
             }
             if viewmodel.airplayDelay {
                 Image(systemName: "airplayaudio")
