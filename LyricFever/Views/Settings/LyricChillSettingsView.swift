@@ -2,7 +2,10 @@ import SwiftUI
 
 enum LyricChillSettingsTab: String, CaseIterable, Identifiable {
     case general
+    case playback
+    case lyrics
     case karaoke
+    case menuBar
     case shortcuts
     case about
 
@@ -11,7 +14,10 @@ enum LyricChillSettingsTab: String, CaseIterable, Identifiable {
     var localizedName: LocalizedStringResource {
         switch self {
         case .general: "General"
+        case .playback: "Playback"
+        case .lyrics: "Lyrics"
         case .karaoke: "Karaoke"
+        case .menuBar: "Menu Bar"
         case .shortcuts: "Shortcuts"
         case .about: "About"
         }
@@ -20,7 +26,10 @@ enum LyricChillSettingsTab: String, CaseIterable, Identifiable {
     var iconName: String {
         switch self {
         case .general: "gearshape"
+        case .playback: "music.note"
+        case .lyrics: "text.alignleft"
         case .karaoke: "quote.bubble"
+        case .menuBar: "menubar.rectangle"
         case .shortcuts: "keyboard"
         case .about: "info.circle"
         }
@@ -66,9 +75,18 @@ struct LyricChillSettingsView: View {
                     LyricChillGeneralSettingsView()
                         .environment(viewModel)
                         .environment(\.modularSettingsTab, LyricChillSettingsTab.general.modularTab)
+                    LyricChillPlaybackSettingsView()
+                        .environment(viewModel)
+                        .environment(\.modularSettingsTab, LyricChillSettingsTab.playback.modularTab)
+                    LyricChillLyricsSettingsView()
+                        .environment(viewModel)
+                        .environment(\.modularSettingsTab, LyricChillSettingsTab.lyrics.modularTab)
                     KaraokeSettingsView()
                         .environment(viewModel)
                         .environment(\.modularSettingsTab, LyricChillSettingsTab.karaoke.modularTab)
+                    LyricChillMenuBarSettingsView()
+                        .environment(viewModel)
+                        .environment(\.modularSettingsTab, LyricChillSettingsTab.menuBar.modularTab)
                     GlobalKeyboardShortcutsView()
                         .environment(\.modularSettingsTab, LyricChillSettingsTab.shortcuts.modularTab)
                     LyricChillAboutSettingsView()
@@ -314,9 +332,21 @@ struct LyricChillSettingsView: View {
             ModularSettingsContainer(tab.modularTab) {
                 LyricChillGeneralSettingsView().environment(viewModel)
             }
+        case .playback:
+            ModularSettingsContainer(tab.modularTab) {
+                LyricChillPlaybackSettingsView().environment(viewModel)
+            }
+        case .lyrics:
+            ModularSettingsContainer(tab.modularTab) {
+                LyricChillLyricsSettingsView().environment(viewModel)
+            }
         case .karaoke:
             ModularSettingsContainer(tab.modularTab) {
                 KaraokeSettingsView().environment(viewModel)
+            }
+        case .menuBar:
+            ModularSettingsContainer(tab.modularTab) {
+                LyricChillMenuBarSettingsView().environment(viewModel)
             }
         case .shortcuts:
             ModularSettingsContainer(tab.modularTab) {
