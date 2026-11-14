@@ -513,7 +513,8 @@ struct MenubarWindowView: View {
                 dismiss()
                 LyricChillSettingsWindowController.shared.open(viewModel: viewmodel)
             } label: {
-                Text("...")
+                Image(systemName: "gearshape")
+                    .font(.system(size: 15, weight: .medium))
             }
             .frame(width: 30)
             .keyboardShortcut("s")
