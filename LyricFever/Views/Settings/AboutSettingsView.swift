@@ -2,6 +2,8 @@ import AppKit
 import SwiftUI
 
 struct LyricChillAboutSettingsView: View {
+    @Environment(ViewModel.self) private var viewModel
+
     private var appIcon: NSImage {
         NSImage(named: NSImage.applicationIconName) ?? NSApplication.shared.applicationIconImage
     }
@@ -42,6 +44,18 @@ struct LyricChillAboutSettingsView: View {
                     title: "LyricChill on GitHub",
                     url: URL(string: "https://github.com/gitmichaelqiu/LyricChill")!
                 )
+            }
+
+            ModularSettingsSection("Updates") {
+                ModularSettingsRow(
+                    "Check for updates",
+                    helperText: "Check whether a newer LyricChill version is available.",
+                    keywords: ["update", "version"]
+                ) {
+                    Button("Check Now") {
+                        viewModel.updaterService.updaterController.checkForUpdates(nil)
+                    }
+                }
             }
 
             VStack(alignment: .leading, spacing: 12) {

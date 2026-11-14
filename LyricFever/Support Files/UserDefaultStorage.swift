@@ -34,6 +34,10 @@ class UserDefaultStorage {
     #if os(macOS)
     @ObservableUserDefault(.init(key: "spotifyConnectDelayCount", defaultValue: 400, store: .standard))
     @ObservationIgnored var spotifyConnectDelayCount: Int
+    @ObservableUserDefault(.init(key: "spotifyConnectDelayEnabled", defaultValue: false, store: .standard))
+    @ObservationIgnored var spotifyConnectDelayEnabled: Bool
+    @ObservableUserDefault(.init(key: "airPlayDelayEnabled", defaultValue: false, store: .standard))
+    @ObservationIgnored var airPlayDelayEnabled: Bool
     @ObservableUserDefault(.init(key: "hasMigrated", defaultValue: false, store: .standard))
     @ObservationIgnored var hasMigrated: Bool
 

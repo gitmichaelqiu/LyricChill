@@ -215,8 +215,14 @@ import MediaRemoteAdapter
     var showLyrics = true
     #if os(macOS)
     var fullscreen = false
-    var spotifyConnectDelay: Bool = false
-    var airplayDelay: Bool = false
+    var spotifyConnectDelay: Bool {
+        get { userDefaultStorage.spotifyConnectDelayEnabled }
+        set { userDefaultStorage.spotifyConnectDelayEnabled = newValue }
+    }
+    var airplayDelay: Bool {
+        get { userDefaultStorage.airPlayDelayEnabled }
+        set { userDefaultStorage.airPlayDelayEnabled = newValue }
+    }
     #endif
     var isFetchingTranslation = false
     var translationExists: Bool { !translatedLyric.isEmpty}

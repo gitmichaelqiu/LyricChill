@@ -335,12 +335,6 @@ struct MenubarWindowView: View {
         }
     }
     
-    @ViewBuilder
-    var spotifyConnectDelayPicker: some View {
-        Text("TODO")
-    }
-    
-    
     var displayFullscreen: ButtonState {
         if !viewmodel.userDefaultStorage.hasOnboarded {
             return .disabled
@@ -513,44 +507,11 @@ struct MenubarWindowView: View {
     }
     
     @ViewBuilder
-    var streamingDelayView: some View {
-        @Bindable var viewmodel = viewmodel
-        if viewmodel.currentPlayer == .spotify {
-             Toggle("Spotify Connect Audio Delay", isOn: $viewmodel.spotifyConnectDelay)
-                 .disabled(!viewmodel.userDefaultStorage.hasOnboarded)
-            if viewmodel.spotifyConnectDelay {
-                 Text("Offset is \(viewmodel.userDefaultStorage.spotifyConnectDelayCount) ms")
-//                 if viewmodel.userDefaultStorage.spotifyConnectDelayCount != 3000 {
-//                     Button("Increase Offset to \(viewmodel.userDefaultStorage.spotifyConnectDelayCount+100)") {
-//                         viewmodel.userDefaultStorage.spotifyConnectDelayCount = viewmodel.userDefaultStorage.spotifyConnectDelayCount + 100
-//                     }
-//                 }
-//                if viewmodel.userDefaultStorage.spotifyConnectDelayCount != 300 {
-//                     Button("Decrease Offset to \(viewmodel.userDefaultStorage.spotifyConnectDelayCount-100)") {
-//                         viewmodel.userDefaultStorage.spotifyConnectDelayCount = viewmodel.userDefaultStorage.spotifyConnectDelayCount - 100
-//                     }
-//                 }
-             }
-            Toggle("AirPlay Audio Delay", isOn: $viewmodel.airplayDelay)
-                .disabled(!viewmodel.userDefaultStorage.hasOnboarded)
-            Divider()
-        }
-    }
-    
-    @ViewBuilder
     var otherOptions: some View {
-        @Bindable var viewmodel = viewmodel
-        Toggle("Show Song Details in Menubar", isOn: $viewmodel.userDefaultStorage.showSongDetailsInMenubar)
-        Divider()
-        streamingDelayView
         Button("Settings…") {
             dismiss()
             LyricChillSettingsWindowController.shared.open(viewModel: viewmodel)
         }.keyboardShortcut("s")
-        Divider()
-        Button("Check for Updates…") {
-            viewmodel.updaterService.updaterController.checkForUpdates(nil)
-        }
     }
     
     @ViewBuilder
@@ -618,62 +579,6 @@ struct MenubarWindowView: View {
         .padding(.top, 8)
     }
     
-    var menubarSizeSliderBinding: Binding<Double> {
-        Binding (
-            get: { Double(viewmodel.userDefaultStorage.truncationLength) },
-            set: { newValue in
-                let steps = [30, 40, 50, 60]
-                let closest = steps.min(by: { abs(Double($0) - newValue) < abs(Double($1) - newValue) }) ?? 40
-                viewmodel.userDefaultStorage.truncationLength = closest
-            }
-        )
-    }
-    
-    var spotifyDelayBinding: Binding<Double> {
-        Binding(
-            get: { Double(viewmodel.userDefaultStorage.spotifyConnectDelayCount) },
-            set: { newValue in
-                let snapped = (round(newValue / 100) * 100)
-                viewmodel.userDefaultStorage.spotifyConnectDelayCount = Int(snapped)
-            }
-        )
-    }
-    
-    @ViewBuilder
-    var menubarSizeSlider: some View {
-        @Bindable var viewmodel = viewmodel
-        HStack {
-            Image(systemName: "textformat.size")
-                .frame(width: 30)
-            Slider(value: menubarSizeSliderBinding, in: 30...60, step: 10, label: {
-                Text("Menubar Size")
-            })
-            .labelsHidden()
-            .frame(width: 160)
-            ModularSettingsAnimatedValue(text: "\(viewmodel.userDefaultStorage.truncationLength)")
-                .frame(minWidth: 50, alignment: .trailing)
-        }
-        .tint(sliderTint)
-    }
-
-    @ViewBuilder
-    var spotifyDelaySlider: some View {
-        @Bindable var viewmodel = viewmodel
-        HStack {
-            Image(systemName: "tortoise")
-                .frame(width: 34, alignment: .trailing)
-            Slider(value: spotifyDelayBinding, in: 300...3000, step: 100) {
-                Text("Spotify Delay")
-            }
-            .labelsHidden()
-            .frame(width: 160)
-            let seconds = Double(viewmodel.userDefaultStorage.spotifyConnectDelayCount) / 1000.0
-            ModularSettingsAnimatedValue(text: "\(seconds.formatted(.number.precision(.fractionLength(1))))s")
-                .frame(minWidth: 50, alignment: .trailing)
-        }
-        .tint(sliderTint)
-    }
-    
     var volumeBinding: Binding<Double> {
         Binding(
             get: { Double(viewmodel.currentVolume) },
@@ -721,12 +626,7 @@ struct MenubarWindowView: View {
             Divider()
             viewSelector
             Divider()
-            menubarSizeSlider
             volumeSlider
-            if viewmodel.spotifyConnectDelay {
-                Divider()
-                spotifyDelaySlider
-            }
             Divider()
             systemControlView
         }

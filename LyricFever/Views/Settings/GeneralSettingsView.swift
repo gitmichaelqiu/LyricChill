@@ -53,6 +53,52 @@ struct LyricChillGeneralSettingsView: View {
                 }
             }
 
+            ModularSettingsSection("Playback timing") {
+                if viewModel.currentPlayer == .spotify {
+                    ModularSettingsRow(
+                        "Spotify Connect Audio Delay",
+                        helperText: "Adjust lyric timing to match Spotify Connect playback.",
+                        keywords: ["Spotify", "Connect", "offset", "timing"]
+                    ) {
+                        Toggle("Spotify Connect Audio Delay", isOn: $viewModel.spotifyConnectDelay)
+                            .labelsHidden()
+                    }
+
+                    if viewModel.spotifyConnectDelay {
+                        Divider()
+
+                        ModularSettingsSliderRow(
+                            "Spotify Delay",
+                            helperText: "Offset applied to Spotify Connect playback.",
+                            keywords: ["Spotify", "Connect", "offset", "milliseconds"],
+                            value: Binding(
+                                get: { Double(viewModel.userDefaultStorage.spotifyConnectDelayCount) },
+                                set: { newValue in
+                                    viewModel.userDefaultStorage.spotifyConnectDelayCount = Int((newValue / 100).rounded() * 100)
+                                }
+                            ),
+                            range: 300.0...3000.0,
+                            defaultValue: 400.0,
+                            step: 100.0,
+                            valueString: { "\(($0 / 1000).formatted(.number.precision(.fractionLength(1)))) s" }
+                        )
+                    }
+                }
+
+                if viewModel.currentPlayer == .spotify {
+                    Divider()
+                }
+
+                ModularSettingsRow(
+                    "AirPlay Audio Delay",
+                    helperText: "Compensate for AirPlay playback latency when lyrics appear late.",
+                    keywords: ["AirPlay", "offset", "timing"]
+                ) {
+                    Toggle("AirPlay Audio Delay", isOn: $viewModel.airplayDelay)
+                        .labelsHidden()
+                }
+            }
+
             ModularSettingsSection("Lyrics") {
                 ModularSettingsRow(
                     "Primary lyric source",
@@ -81,6 +127,18 @@ struct LyricChillGeneralSettingsView: View {
                             showingSpotifyConnection = true
                         }
                     }
+                }
+
+            }
+
+            ModularSettingsSection("Menu Bar") {
+                ModularSettingsRow(
+                    "Show song details in menu bar",
+                    helperText: "Show the current song title and artist in the menu bar.",
+                    keywords: ["title", "artist", "display"]
+                ) {
+                    Toggle("Show song details in menu bar", isOn: $viewModel.userDefaultStorage.showSongDetailsInMenubar)
+                        .labelsHidden()
                 }
 
                 Divider()

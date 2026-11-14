@@ -536,6 +536,7 @@
 
     },
     "Disable Karaoke" : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -558,6 +559,7 @@
       }
     },
     "Disable Lyrics" : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -624,6 +626,7 @@
       }
     },
     "Enable Karaoke" : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -646,6 +649,7 @@
       }
     },
     "Enable Lyrics" : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -767,6 +771,28 @@
     "Granted" : {
 
     },
+    "Hide karaoke window" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "隐藏卡拉 OK 窗口"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "隱藏卡拉 OK 視窗"
+          }
+        },
+        "zh-Hant-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "隱藏卡拉 OK 視窗"
+          }
+        }
+      }
+    },
     "Hide lyrics (⌘ + H)" : {
       "localizations" : {
         "zh-Hans" : {
@@ -785,6 +811,28 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "隱藏歌詞（⌘ + H）"
+          }
+        }
+      }
+    },
+    "Hide menu bar lyrics" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "隐藏菜单栏歌词"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "隱藏選單列歌詞"
+          }
+        },
+        "zh-Hant-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "隱藏選單列歌詞"
           }
         }
       }
@@ -840,6 +888,7 @@
 
     },
     "Karaoke Unavailable" : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -857,6 +906,28 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "無法顯示卡拉 OK"
+          }
+        }
+      }
+    },
+    "Karaoke window unavailable" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "卡拉 OK 窗口不可用"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "卡拉 OK 視窗無法使用"
+          }
+        },
+        "zh-Hant-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "卡拉 OK 視窗未能使用"
           }
         }
       }
@@ -930,6 +1001,7 @@
 
     },
     "Lyrics unavailable." : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -1000,6 +1072,28 @@
     },
     "Menu bar lyric length" : {
 
+    },
+    "Menu bar lyrics unavailable" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "菜单栏歌词不可用"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "選單列歌詞無法使用"
+          }
+        },
+        "zh-Hant-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "選單列歌詞未能使用"
+          }
+        }
+      }
     },
     "Menubar Size" : {
       "localizations" : {
@@ -1833,6 +1927,28 @@
     "Shortcuts" : {
 
     },
+    "Show karaoke window" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "显示卡拉 OK 窗口"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "顯示卡拉 OK 視窗"
+          }
+        },
+        "zh-Hant-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "顯示卡拉 OK 視窗"
+          }
+        }
+      }
+    },
     "Show lyrics (⌘ + H)" : {
       "localizations" : {
         "zh-Hans" : {
@@ -1851,6 +1967,28 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "顯示歌詞（⌘ + H）"
+          }
+        }
+      }
+    },
+    "Show menu bar lyrics" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在菜单栏显示歌词"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在選單列顯示歌詞"
+          }
+        },
+        "zh-Hant-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "喺選單列顯示歌詞"
           }
         }
       }
@@ -2572,136 +2710,81 @@
         }
       }
     },
-    "Show menu bar lyrics" : {
+    "Playback timing" : {
       "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "在菜单栏显示歌词"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "在選單列顯示歌詞"
-          }
-        },
-        "zh-Hant-HK" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "喺選單列顯示歌詞"
-          }
-        }
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "播放时间" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "播放時間" } },
+        "zh-Hant-HK" : { "stringUnit" : { "state" : "translated", "value" : "播放時間" } }
       }
     },
-    "Hide menu bar lyrics" : {
+    "Adjust lyric timing to match Spotify Connect playback." : {
       "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "隐藏菜单栏歌词"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "隱藏選單列歌詞"
-          }
-        },
-        "zh-Hant-HK" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "隱藏選單列歌詞"
-          }
-        }
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "调整歌词同步以匹配 Spotify Connect 播放。" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "調整歌詞同步以配合 Spotify Connect 播放。" } },
+        "zh-Hant-HK" : { "stringUnit" : { "state" : "translated", "value" : "調整歌詞同步以配合 Spotify Connect 播放。" } }
       }
     },
-    "Menu bar lyrics unavailable" : {
+    "Offset applied to Spotify Connect playback." : {
       "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "菜单栏歌词不可用"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "選單列歌詞無法使用"
-          }
-        },
-        "zh-Hant-HK" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "選單列歌詞未能使用"
-          }
-        }
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "应用于 Spotify Connect 播放的偏移量。" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "套用於 Spotify Connect 播放的偏移量。" } },
+        "zh-Hant-HK" : { "stringUnit" : { "state" : "translated", "value" : "套用於 Spotify Connect 播放的偏移量。" } }
       }
     },
-    "Show karaoke window" : {
+    "Compensate for AirPlay playback latency when lyrics appear late." : {
       "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "显示卡拉 OK 窗口"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "顯示卡拉 OK 視窗"
-          }
-        },
-        "zh-Hant-HK" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "顯示卡拉 OK 視窗"
-          }
-        }
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "歌词显示延迟时，用于补偿 AirPlay 播放延迟。" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "歌詞顯示延遲時，用於補償 AirPlay 播放延遲。" } },
+        "zh-Hant-HK" : { "stringUnit" : { "state" : "translated", "value" : "歌詞顯示延遲時，用於補償 AirPlay 播放延遲。" } }
       }
     },
-    "Hide karaoke window" : {
+    "Menu Bar" : {
       "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "隐藏卡拉 OK 窗口"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "隱藏卡拉 OK 視窗"
-          }
-        },
-        "zh-Hant-HK" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "隱藏卡拉 OK 視窗"
-          }
-        }
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "菜单栏" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "選單列" } },
+        "zh-Hant-HK" : { "stringUnit" : { "state" : "translated", "value" : "選單列" } }
       }
     },
-    "Karaoke window unavailable" : {
+    "Show the current song title and artist in the menu bar." : {
       "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "卡拉 OK 窗口不可用"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "卡拉 OK 視窗無法使用"
-          }
-        },
-        "zh-Hant-HK" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "卡拉 OK 視窗未能使用"
-          }
-        }
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "在菜单栏显示当前歌曲名称和艺人。" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "在選單列顯示目前歌曲名稱和歌手。" } },
+        "zh-Hant-HK" : { "stringUnit" : { "state" : "translated", "value" : "喺選單列顯示目前歌曲名稱和歌手。" } }
+      }
+    },
+    "Updates" : {
+      "localizations" : {
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "更新" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "更新" } },
+        "zh-Hant-HK" : { "stringUnit" : { "state" : "translated", "value" : "更新" } }
+      }
+    },
+    "Check for updates" : {
+      "localizations" : {
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "检查更新" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "檢查更新" } },
+        "zh-Hant-HK" : { "stringUnit" : { "state" : "translated", "value" : "檢查更新" } }
+      }
+    },
+    "Check whether a newer LyricChill version is available." : {
+      "localizations" : {
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "检查是否有更新版本的 LyricChill。" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "檢查是否有較新版本的 LyricChill。" } },
+        "zh-Hant-HK" : { "stringUnit" : { "state" : "translated", "value" : "檢查是否有較新版本的 LyricChill。" } }
+      }
+    },
+    "Check Now" : {
+      "localizations" : {
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "立即检查" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "立即檢查" } },
+        "zh-Hant-HK" : { "stringUnit" : { "state" : "translated", "value" : "立即檢查" } }
+      }
+    },
+    "Show song details in menu bar" : {
+      "localizations" : {
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "在菜单栏显示歌曲详情" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "在選單列顯示歌曲詳細資料" } },
+        "zh-Hant-HK" : { "stringUnit" : { "state" : "translated", "value" : "喺選單列顯示歌曲詳細資料" } }
       }
     }
   },
