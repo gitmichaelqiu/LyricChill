@@ -1,16 +1,19 @@
+import AppKit
 import LaunchAtLogin
 import SwiftUI
 
 struct LyricChillGeneralSettingsView: View {
     @Environment(ViewModel.self) private var viewModel
-    @Environment(\.openWindow) private var openWindow
     @State private var showingSpotifyConnection = false
+    @State private var playerAccessRevision = 0
     @AppStorage("spotifyOrAppleMusic") private var spotifyOrAppleMusic = false
     @AppStorage("truncationLength") private var truncationLength = 40
 
     var body: some View {
         @Bindable var viewModel = viewModel
+        let _ = playerAccessRevision
         let playerIsAuthorized = viewModel.currentPlayerInstance.isAuthorized
+        let playerIsRunning = viewModel.currentPlayerInstance.isRunning
 
         VStack(alignment: .leading, spacing: 20) {
             ModularSettingsSection("Playback") {
@@ -39,15 +42,25 @@ struct LyricChillGeneralSettingsView: View {
                 ModularSettingsRow(
                     "Player access",
                     helperText: "LyricChill needs permission to read the selected music app's playback state.",
-                    warningText: playerIsAuthorized ? nil : "Open setup to grant or check access for the selected music app.",
+                    warningText: playerIsAuthorized ? nil : "Open the selected player and grant LyricChill access in Automation Settings.",
                     keywords: ["permission", "authorization"]
                 ) {
                     HStack(spacing: 10) {
-                        ModularSettingsPermissionStatusIcon(isGranted: playerIsAuthorized)
-                        Text(playerIsAuthorized ? "Ready" : "Setup required")
+                        if playerIsRunning {
+                            ModularSettingsPermissionStatusIcon(isGranted: playerIsAuthorized)
+                        } else {
+                            Image(systemName: "minus.circle.fill")
+                                .foregroundStyle(.secondary)
+                                .accessibilityLabel("Player not running")
+                        }
+                        Text(playerIsAuthorized ? "Ready" : playerIsRunning ? "Setup required" : "Player not running")
                             .foregroundStyle(.secondary)
-                        Button("Open Setup") {
-                            openWindow(id: "onboarding")
+                        Button("Open Automation Panel") {
+                            _ = viewModel.currentPlayerInstance.isAuthorized
+                            guard let settingsURL = URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_Automation") else {
+                                return
+                            }
+                            NSWorkspace.shared.open(settingsURL)
                         }
                     }
                 }
@@ -167,6 +180,9 @@ struct LyricChillGeneralSettingsView: View {
             Spacer()
         }
         .frame(maxWidth: .infinity, alignment: .topLeading)
+        .onReceive(NotificationCenter.default.publisher(for: NSApplication.didBecomeActiveNotification)) { _ in
+            playerAccessRevision += 1
+        }
         .sheet(isPresented: $showingSpotifyConnection) {
             NavigationStack {
                 ApiView(onComplete: { showingSpotifyConnection = false })

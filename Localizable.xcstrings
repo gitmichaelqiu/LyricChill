@@ -2786,6 +2786,20 @@
         "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "在選單列顯示歌曲詳細資料" } },
         "zh-Hant-HK" : { "stringUnit" : { "state" : "translated", "value" : "喺選單列顯示歌曲詳細資料" } }
       }
+    },
+    "Player not running" : {
+      "localizations" : {
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "播放器未运行" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "播放器未執行" } },
+        "zh-Hant-HK" : { "stringUnit" : { "state" : "translated", "value" : "播放器未運行" } }
+      }
+    },
+    "Open the selected player and grant LyricChill access in Automation Settings." : {
+      "localizations" : {
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "打开所选播放器，然后在自动化设置中授予 LyricChill 权限。" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "開啟所選播放器，然後在自動化設定中授予 LyricChill 權限。" } },
+        "zh-Hant-HK" : { "stringUnit" : { "state" : "translated", "value" : "開啟所選播放器，然後在自動化設定中授予 LyricChill 權限。" } }
+      }
     }
   },
   "version" : "1.0"
