@@ -42,7 +42,9 @@ struct LyricChillGeneralSettingsView: View {
                 ModularSettingsRow(
                     "Player access",
                     helperText: "LyricChill needs permission to read the selected music app's playback state.",
-                    warningText: playerIsAuthorized ? nil : "Open the selected player and grant LyricChill access in Automation Settings.",
+                    warningText: playerIsRunning && !playerIsAuthorized
+                        ? "Open the selected player and grant LyricChill access in Automation Settings."
+                        : nil,
                     keywords: ["permission", "authorization"]
                 ) {
                     HStack(spacing: 10) {
@@ -55,7 +57,9 @@ struct LyricChillGeneralSettingsView: View {
                         }
                         Text(playerIsAuthorized ? "Ready" : playerIsRunning ? "Setup required" : "Player not running")
                             .foregroundStyle(.secondary)
-                        Button("Open Automation Panel") {
+                            .lineLimit(1)
+                            .fixedSize(horizontal: true, vertical: false)
+                        Button("Open Setup") {
                             _ = viewModel.currentPlayerInstance.isAuthorized
                             guard let settingsURL = URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_Automation") else {
                                 return
@@ -75,6 +79,7 @@ struct LyricChillGeneralSettingsView: View {
                     ) {
                         Toggle("Spotify Connect Audio Delay", isOn: $viewModel.spotifyConnectDelay)
                             .labelsHidden()
+                            .toggleStyle(.switch)
                     }
 
                     if viewModel.spotifyConnectDelay {
@@ -109,6 +114,7 @@ struct LyricChillGeneralSettingsView: View {
                 ) {
                     Toggle("AirPlay Audio Delay", isOn: $viewModel.airplayDelay)
                         .labelsHidden()
+                        .toggleStyle(.switch)
                 }
             }
 
@@ -152,6 +158,7 @@ struct LyricChillGeneralSettingsView: View {
                 ) {
                     Toggle("Show song details in menu bar", isOn: $viewModel.userDefaultStorage.showSongDetailsInMenubar)
                         .labelsHidden()
+                        .toggleStyle(.switch)
                 }
 
                 Divider()
