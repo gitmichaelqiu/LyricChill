@@ -184,6 +184,18 @@ struct LyricChillGeneralSettingsView: View {
                         .toggleStyle(.switch)
                 }
             }
+
+            ModularSettingsSection("Updates") {
+                ModularSettingsRow(
+                    "Check for updates",
+                    helperText: "Check whether a newer LyricChill version is available.",
+                    keywords: ["update", "version"]
+                ) {
+                    Button("Check Now") {
+                        viewModel.updaterService.updaterController.checkForUpdates(nil)
+                    }
+                }
+            }
             Spacer()
         }
         .frame(maxWidth: .infinity, alignment: .topLeading)
