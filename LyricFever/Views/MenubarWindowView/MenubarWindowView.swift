@@ -194,6 +194,32 @@ struct MenubarWindowView: View {
             return .clickable
         }
     }
+
+    private var lyricsControlHighlight: MenubarButtonHighlight {
+        switch displayLyrics {
+        case .enabled:
+            .hideMenuBarLyrics
+        case .disabled:
+            .menuBarLyricsUnavailable
+        case .clickable:
+            .showMenuBarLyrics
+        default:
+            .none
+        }
+    }
+
+    private var karaokeControlHighlight: MenubarButtonHighlight {
+        switch displayKaraoke {
+        case .enabled:
+            .hideKaraokeWindow
+        case .disabled:
+            .karaokeWindowUnavailable
+        case .clickable:
+            .showKaraokeWindow
+        default:
+            .none
+        }
+    }
     
     
     @ViewBuilder
@@ -202,21 +228,10 @@ struct MenubarWindowView: View {
             MenubarButton(buttonText: "", imageText: "music.note.list", buttonState: displayLyrics) {
                 viewmodel.showLyrics.toggle()
             }
+            .accessibilityLabel(lyricsControlHighlight.description)
+            .help(lyricsControlHighlight.description)
             .onHover { isHovering in
-                if isHovering {
-                    switch displayLyrics {
-                        case .enabled:
-                            currentHoveredItem = .disableLyrics
-                        case .disabled:
-                            currentHoveredItem = .unavailableLyrics
-                        case .clickable:
-                            currentHoveredItem = .enableLyrics
-                        default:
-                            currentHoveredItem = .none
-                    }
-                } else {
-                    currentHoveredItem = .none
-                }
+                currentHoveredItem = isHovering ? lyricsControlHighlight : .none
             }
             MenubarButton(buttonText: "", imageText: "arrow.up.left.and.arrow.down.right", buttonState: displayFullscreen) {
                 viewmodel.displayFullscreen.toggle()
@@ -229,21 +244,10 @@ struct MenubarWindowView: View {
             MenubarButton(buttonText: "", imageText: "dock.rectangle", buttonState: displayKaraoke) {
                 viewmodel.userDefaultStorage.karaoke.toggle()
             }
+            .accessibilityLabel(karaokeControlHighlight.description)
+            .help(karaokeControlHighlight.description)
             .onHover { isHovering in
-                if isHovering {
-                    switch displayKaraoke {
-                        case .enabled:
-                            currentHoveredItem = .disableKaraoke
-                        case .disabled:
-                            currentHoveredItem = .unavailableKaraoke
-                        case .clickable:
-                            currentHoveredItem = .enableKaraoke
-                        default:
-                            currentHoveredItem = .none
-                    }
-                } else {
-                    currentHoveredItem = .none
-                }
+                currentHoveredItem = isHovering ? karaokeControlHighlight : .none
             }
         }
     }

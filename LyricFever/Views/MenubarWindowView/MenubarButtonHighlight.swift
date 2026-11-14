@@ -14,13 +14,13 @@ enum MenubarButtonHighlight {
     case play
     case pause
     case forward
-    case enableLyrics
-    case disableLyrics
-    case unavailableLyrics
+    case showMenuBarLyrics
+    case hideMenuBarLyrics
+    case menuBarLyricsUnavailable
     case enableFullscreen
-    case enableKaraoke
-    case disableKaraoke
-    case unavailableKaraoke
+    case showKaraokeWindow
+    case hideKaraokeWindow
+    case karaokeWindowUnavailable
     case refreshLyrics
     case refreshingLyrics
     case search
@@ -51,20 +51,20 @@ enum MenubarButtonHighlight {
                 LocalizedStringKey("Pause (spacebar)")
             case .forward:
                 LocalizedStringKey("Forward")
-            case .enableLyrics:
-                LocalizedStringKey("Enable Lyrics")
-            case .disableLyrics:
-                LocalizedStringKey("Disable Lyrics")
-            case .unavailableLyrics:
-                LocalizedStringKey("Lyrics unavailable.")
+            case .showMenuBarLyrics:
+                LocalizedStringKey("Show menu bar lyrics")
+            case .hideMenuBarLyrics:
+                LocalizedStringKey("Hide menu bar lyrics")
+            case .menuBarLyricsUnavailable:
+                LocalizedStringKey("Menu bar lyrics unavailable")
             case .enableFullscreen:
                 LocalizedStringKey("Open Fullscreen")
-            case .enableKaraoke:
-                LocalizedStringKey("Enable Karaoke")
-            case .disableKaraoke:
-                LocalizedStringKey("Disable Karaoke")
-            case .unavailableKaraoke:
-                LocalizedStringKey("Karaoke Unavailable")
+            case .showKaraokeWindow:
+                LocalizedStringKey("Show karaoke window")
+            case .hideKaraokeWindow:
+                LocalizedStringKey("Hide karaoke window")
+            case .karaokeWindowUnavailable:
+                LocalizedStringKey("Karaoke window unavailable")
             case .refreshLyrics:
                 LocalizedStringKey("Redownload lyrics")
             case .refreshingLyrics:
