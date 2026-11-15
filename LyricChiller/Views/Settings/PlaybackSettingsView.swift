@@ -75,7 +75,6 @@ struct LyricChillerPlaybackSettingsView: View {
 
                         ModularSettingsSliderRow(
                             "Spotify Delay",
-                            helperText: "Offset applied to Spotify Connect playback.",
                             keywords: ["Spotify", "Connect", "offset", "milliseconds"],
                             value: Binding(
                                 get: { Double(viewModel.userDefaultStorage.spotifyConnectDelayCount) },

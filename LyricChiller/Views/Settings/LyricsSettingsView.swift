@@ -11,7 +11,6 @@ struct LyricChillerLyricsSettingsView: View {
             ModularSettingsSection("Lyrics") {
                 ModularSettingsRow(
                     "Primary lyric source",
-                    helperText: "LyricChiller tries this source first, then falls back to other available providers.",
                     keywords: ["LRCLIB", "Spotify", "NetEase", "provider"]
                 ) {
                     Picker("", selection: $viewModel.userDefaultStorage.lyricSourcePreference) {
