@@ -97,6 +97,18 @@ struct LyricChillerGeneralSettingsView: View {
                     }
                 }
             }
+
+            ModularSettingsSection("Advanced") {
+                ModularSettingsRow(
+                    "Review onboarding",
+                    helperText: "Reopen the setup walkthrough for your music app and lyric source.",
+                    keywords: ["setup", "welcome", "walkthrough"]
+                ) {
+                    Button("Review") {
+                        LyricChillerSettingsWindowController.shared.showSetupOnboarding()
+                    }
+                }
+            }
         }
         .frame(maxWidth: .infinity, alignment: .topLeading)
     }

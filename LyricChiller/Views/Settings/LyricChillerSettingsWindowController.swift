@@ -6,6 +6,7 @@ final class LyricChillerSettingsWindowController: NSObject, NSWindowDelegate {
     static let shared = LyricChillerSettingsWindowController()
 
     private var windowController: NSWindowController?
+    private var onboardingWindowController: NSWindowController?
 
     func open(viewModel: ViewModel, tab: LyricChillerSettingsTab = .general) {
         if let windowController, let window = windowController.window {
@@ -54,6 +55,56 @@ final class LyricChillerSettingsWindowController: NSObject, NSWindowDelegate {
         if !ViewModel.shared.fullscreen {
             NSApp.setActivationPolicy(.accessory)
         }
+    }
+
+    func showSetupOnboarding() {
+        if let onboardingWindow = onboardingWindowController?.window, onboardingWindow.isVisible {
+            NSApp.activate(ignoringOtherApps: true)
+            onboardingWindow.makeKeyAndOrderFront(nil)
+            return
+        }
+
+        guard let parentWindow = windowController?.window else { return }
+
+        let onboardingView = LyricChillerSetupOnboardingView { [weak self] in
+            self?.finishSetupOnboarding()
+        }
+        .environment(ViewModel.shared)
+
+        let hostingController = NSHostingController(rootView: onboardingView)
+        let onboardingWindow = NSWindow(
+            contentRect: NSRect(x: 0, y: 0, width: 750, height: 550),
+            styleMask: [.titled, .closable, .fullSizeContentView],
+            backing: .buffered,
+            defer: false
+        )
+        onboardingWindow.titlebarAppearsTransparent = true
+        onboardingWindow.titleVisibility = .hidden
+        onboardingWindow.isMovableByWindowBackground = true
+        onboardingWindow.contentViewController = hostingController
+
+        let onboardingController = NSWindowController(window: onboardingWindow)
+        onboardingWindowController = onboardingController
+
+        parentWindow.beginSheet(onboardingWindow) { [weak self] _ in
+            UserDefaults.standard.set(true, forKey: "hasCompletedSetupOnboarding")
+            self?.onboardingWindowController = nil
+        }
+        NSApp.activate(ignoringOtherApps: true)
+    }
+
+    private func finishSetupOnboarding() {
+        ViewModel.shared.refreshPlayerAuthorization()
+        UserDefaults.standard.set(true, forKey: "hasCompletedSetupOnboarding")
+
+        guard let onboardingWindow = onboardingWindowController?.window,
+              let parentWindow = onboardingWindow.sheetParent else {
+            onboardingWindowController?.close()
+            onboardingWindowController = nil
+            return
+        }
+
+        parentWindow.endSheet(onboardingWindow)
     }
 
     private func configure(_ window: NSWindow) {

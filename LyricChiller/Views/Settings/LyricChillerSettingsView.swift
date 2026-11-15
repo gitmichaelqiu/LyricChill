@@ -95,12 +95,6 @@ struct LyricChillerSettingsView: View {
                 .accessibilityHidden(true)
             }
 
-            if shouldShowSetupOnboarding {
-                LyricChillerSetupOnboardingView(onFinish: completeSetupOnboarding)
-                    .environment(viewModel)
-                    .frame(width: settingsWindowWidth, height: settingsWindowHeight)
-                    .zIndex(1)
-            }
         }
         .environmentObject(navigationState)
         .navigationTitle("")
@@ -123,20 +117,15 @@ struct LyricChillerSettingsView: View {
             selectedTab = tab
         }
         .onAppear {
+            if !hasCompletedSetupOnboarding {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
+                    LyricChillerSettingsWindowController.shared.showSetupOnboarding()
+                }
+            }
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                 isIndexingSettings = false
             }
         }
-    }
-
-    private var shouldShowSetupOnboarding: Bool {
-        !hasCompletedSetupOnboarding
-    }
-
-    private func completeSetupOnboarding() {
-        viewModel.refreshPlayerAuthorization()
-        hasCompletedSetupOnboarding = true
-        selectedTab = .playback
     }
 
     private var filteredTabs: [LyricChillerSettingsTab] {
