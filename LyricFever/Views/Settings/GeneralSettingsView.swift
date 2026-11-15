@@ -15,40 +15,66 @@ struct LyricChillGeneralSettingsView: View {
                     helperText: "Show the LyricChill menu bar icon and controls.",
                     keywords: ["icon", "status item", "controls"]
                 ) {
-                    Toggle("Show menu bar icon", isOn: $viewModel.userDefaultStorage.showMenubarIcon)
+                    Toggle(
+                        "Show menu bar icon",
+                        isOn: Binding(
+                            get: { viewModel.userDefaultStorage.showMenubarIcon },
+                            set: { isVisible in
+                                withModularSettingsAnimation {
+                                    viewModel.userDefaultStorage.showMenubarIcon = isVisible
+                                }
+                            }
+                        )
+                    )
                         .labelsHidden()
                         .toggleStyle(.switch)
                 }
 
                 if viewModel.userDefaultStorage.showMenubarIcon {
-                    Divider()
-
-                    ModularSettingsRow(
-                        "Show song details in menu bar",
-                        helperText: "When menu bar lyrics are hidden or unavailable, show the current song title and artist.",
-                        keywords: ["title", "artist", "display"]
-                    ) {
-                        Toggle("Show song details in menu bar", isOn: $viewModel.userDefaultStorage.showSongDetailsInMenubar)
-                            .labelsHidden()
-                            .toggleStyle(.switch)
-                    }
-
-                    if viewModel.userDefaultStorage.showSongDetailsInMenubar {
+                    Group {
                         Divider()
 
                         ModularSettingsRow(
-                            "Menu bar lyric length",
-                            helperText: "Choose the maximum number of characters shown in the menu bar.",
-                            keywords: ["truncation", "characters", "display"]
+                            "Show song details in menu bar",
+                            helperText: "When menu bar lyrics are hidden or unavailable, show the current song title and artist.",
+                            keywords: ["title", "artist", "display"]
                         ) {
-                            Picker("", selection: $truncationLength) {
-                                ForEach([30, 40, 50, 60], id: \.self) { length in
-                                    Text("\(length) characters").tag(length)
+                            Toggle(
+                                "Show song details in menu bar",
+                                isOn: Binding(
+                                    get: { viewModel.userDefaultStorage.showSongDetailsInMenubar },
+                                    set: { showDetails in
+                                        withModularSettingsAnimation {
+                                            viewModel.userDefaultStorage.showSongDetailsInMenubar = showDetails
+                                        }
+                                    }
+                                )
+                            )
+                            .labelsHidden()
+                            .toggleStyle(.switch)
+                        }
+
+                        if viewModel.userDefaultStorage.showSongDetailsInMenubar {
+                            Group {
+                                Divider()
+
+                                ModularSettingsRow(
+                                    "Menu bar lyric length",
+                                    helperText: "Choose the maximum number of characters shown in the menu bar.",
+                                    keywords: ["truncation", "characters", "display"]
+                                ) {
+                                    Picker("", selection: $truncationLength) {
+                                        ForEach([30, 40, 50, 60], id: \.self) { length in
+                                            Text("\(length) characters").tag(length)
+                                        }
+                                    }
+                                    .labelsHidden()
                                 }
                             }
-                            .labelsHidden()
+                            .transition(.opacity.combined(with: .move(edge: .top)))
                         }
                     }
+                    .transition(.opacity.combined(with: .move(edge: .top)))
                 }
             }
 
