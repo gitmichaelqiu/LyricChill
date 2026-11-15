@@ -65,8 +65,8 @@ class AppleMusicPlayer: Player {
         }
     }
     
-    var volume: Int {
-        appleMusicScript?.soundVolume ?? 0
+    var volume: Int? {
+        appleMusicScript?.soundVolume
     }
     
     func decreaseVolume() {

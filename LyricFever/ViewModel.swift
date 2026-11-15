@@ -29,7 +29,7 @@ import MediaRemoteAdapter
 
     var currentlyPlaying: String?
     
-    var currentVolume: Int = 0
+    var currentVolume: Int?
     var isStopped = false
     
     var artworkImage: NSImage?
@@ -810,7 +810,6 @@ import MediaRemoteAdapter
         currentlyPlayingAppleMusicPersistentID = nil
         currentTime = CurrentTimeWithStoredDate(currentTime: 0)
         duration = 0
-        currentVolume = 0
         isPlaying = false
         isStopped = true
         artworkImage = nil

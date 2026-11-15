@@ -25,7 +25,7 @@ protocol Player {
     var isRunning: Bool { get }
     
     // additional menubar functions
-    var volume: Int { get }
+    var volume: Int? { get }
     
     // fullscreen functions
     func decreaseVolume()

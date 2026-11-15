@@ -39,6 +39,12 @@ struct MenubarWindowView: View {
         formatter.zeroFormattingBehavior = [.pad]
         return formatter.string(from: TimeInterval(Int(milliseconds / 1000))) ?? "0:00"
     }
+
+    private func synchronizeVolume() {
+        guard viewmodel.isPlayerRunning,
+              let volume = viewmodel.currentPlayerInstance.volume else { return }
+        viewmodel.currentVolume = min(max(volume, 0), 100)
+    }
     
     @ViewBuilder
     var profilePicViewHeaderView: some View {
@@ -553,7 +559,7 @@ struct MenubarWindowView: View {
     
     var volumeBinding: Binding<Double> {
         Binding(
-            get: { Double(viewmodel.currentVolume) },
+            get: { Double(viewmodel.currentVolume ?? 0) },
             set: { newValue in
                 guard viewmodel.isPlayerRunning else { return }
                 viewmodel.currentPlayerInstance.setVolume(to: newValue)
@@ -566,8 +572,14 @@ struct MenubarWindowView: View {
     var volumeSlider: some View {
         @Bindable var viewmodel = viewmodel
         HStack {
-            Image(systemName: "speaker.wave.3", variableValue: Double(viewmodel.currentVolume)/100)
-                .frame(width: 30)
+            Group {
+                if let currentVolume = viewmodel.currentVolume {
+                    Image(systemName: "speaker.wave.3", variableValue: Double(currentVolume) / 100)
+                } else {
+                    Image(systemName: "speaker.wave.2")
+                }
+            }
+            .frame(width: 30)
             if #available(macOS 26.0, *) {
                 Slider(value: volumeBinding, in: 0...100) {
                     Text("Volume")
@@ -583,11 +595,11 @@ struct MenubarWindowView: View {
                 .labelsHidden()
                 .frame(width: 160)
             }
-            ModularSettingsAnimatedValue(text: "\(viewmodel.currentVolume)")
+            ModularSettingsAnimatedValue(text: viewmodel.currentVolume.map(String.init) ?? "—")
                 .frame(minWidth: 50, alignment: .trailing)
         }
         .tint(sliderTint)
-        .disabled(!viewmodel.isPlayerRunning)
+        .disabled(!viewmodel.isPlayerRunning || viewmodel.currentVolume == nil)
     }
     
     var body: some View {
@@ -612,9 +624,24 @@ struct MenubarWindowView: View {
         )
         .modifier(MenubarGlassSurfaceModifier())
         .onAppear {
-            if viewmodel.isPlayerRunning, !viewmodel.isStopped {
-                viewmodel.currentVolume = viewmodel.currentPlayerInstance.volume
+            synchronizeVolume()
+        }
+        .onChange(of: viewmodel.currentPlayer) { _, _ in
+            viewmodel.currentVolume = nil
+            synchronizeVolume()
+        }
+        .onChange(of: viewmodel.isPlayerRunning) { _, isRunning in
+            if isRunning {
+                synchronizeVolume()
+            } else {
+                viewmodel.currentVolume = nil
             }
+        }
+        .onChange(of: viewmodel.isPlaying) { _, isPlaying in
+            if isPlaying { synchronizeVolume() }
+        }
+        .onChange(of: viewmodel.isStopped) { _, isStopped in
+            if !isStopped { synchronizeVolume() }
         }
         .task {
             let languages = await Task.detached {

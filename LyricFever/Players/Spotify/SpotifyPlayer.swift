@@ -67,8 +67,8 @@ class SpotifyPlayer: @MainActor Player {
         }
     }
     
-    var volume: Int {
-        spotifyScript?.soundVolume ?? 0
+    var volume: Int? {
+        spotifyScript?.soundVolume
     }
     
     func decreaseVolume() {
