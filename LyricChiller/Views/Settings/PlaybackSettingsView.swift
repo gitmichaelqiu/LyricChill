@@ -1,7 +1,7 @@
 import AppKit
 import SwiftUI
 
-struct LyricChillPlaybackSettingsView: View {
+struct LyricChillerPlaybackSettingsView: View {
     @Environment(ViewModel.self) private var viewModel
     @State private var playerAccessRevision = 0
     @AppStorage("spotifyOrAppleMusic") private var spotifyOrAppleMusic = false
@@ -16,7 +16,7 @@ struct LyricChillPlaybackSettingsView: View {
             ModularSettingsSection("Playback") {
                 ModularSettingsRow(
                     "Music app",
-                    helperText: "Choose the app LyricChill reads playback information from.",
+                    helperText: "Choose the app LyricChiller reads playback information from.",
                     keywords: ["Spotify", "Apple Music", "player"]
                 ) {
                     if #available(macOS 26.0, *) {
@@ -38,9 +38,9 @@ struct LyricChillPlaybackSettingsView: View {
 
                 ModularSettingsRow(
                     "Player access",
-                    helperText: "LyricChill needs permission to read the selected music app's playback state.",
+                    helperText: "LyricChiller needs permission to read the selected music app's playback state.",
                     warningText: playerIsRunning && !playerIsAuthorized
-                        ? "Open the selected player and grant LyricChill access in Automation Settings."
+                        ? "Open the selected player and grant LyricChiller access in Automation Settings."
                         : nil,
                     keywords: ["permission", "authorization"]
                 ) {

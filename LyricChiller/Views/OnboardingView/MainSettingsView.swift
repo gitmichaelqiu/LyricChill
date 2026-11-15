@@ -58,11 +58,11 @@ struct MainSettingsView: View {
     
     @ViewBuilder
     var onboardView: some View {
-        Image("LyricChillLogo")
+        Image("LyricChillerLogo")
             .resizable()
             .frame(width: 150, height: 150, alignment: .center)
                     
-        Text("Welcome to LyricChill! 🎉")
+        Text("Welcome to LyricChiller! 🎉")
             .font(.largeTitle)
                     
         Text("Choose Spotify or Apple Music as your playback app")
@@ -156,7 +156,7 @@ struct MainSettingsView: View {
                 
                 VStack {
                     Text(verbatim: "Lyrics are provided by third-party services and remain the property of their respective rights holders.")
-                    Text("[LyricChill GitHub](https://github.com/gitmichaelqiu/LyricChill)")
+                    Text("[LyricChiller GitHub](https://github.com/gitmichaelqiu/LyricChiller)")
                 }
                     .multilineTextAlignment(.center)
                     .font(.callout)

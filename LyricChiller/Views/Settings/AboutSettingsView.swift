@@ -1,7 +1,7 @@
 import AppKit
 import SwiftUI
 
-struct LyricChillAboutSettingsView: View {
+struct LyricChillerAboutSettingsView: View {
     private var appIcon: NSImage {
         NSImage(named: NSImage.applicationIconName) ?? NSApplication.shared.applicationIconImage
     }
@@ -21,7 +21,7 @@ struct LyricChillAboutSettingsView: View {
                     .shadow(color: .black.opacity(0.1), radius: 4, x: 0, y: 2)
 
                 VStack(alignment: .leading, spacing: 4) {
-                    Text("LyricChill")
+                    Text("LyricChiller")
                         .font(.custom("Syncopate-Bold", size: 24))
 
                     Text("v\(version)")
@@ -38,9 +38,9 @@ struct LyricChillAboutSettingsView: View {
                 Text("Links")
                     .font(.headline)
 
-                LyricChillAboutLinkRow(
-                    title: "LyricChill on GitHub",
-                    url: URL(string: "https://github.com/gitmichaelqiu/LyricChill")!
+                LyricChillerAboutLinkRow(
+                    title: "LyricChiller on GitHub",
+                    url: URL(string: "https://github.com/gitmichaelqiu/LyricChiller")!
                 )
             }
 
@@ -57,7 +57,7 @@ struct LyricChillAboutSettingsView: View {
     }
 }
 
-private struct LyricChillAboutLinkRow: View {
+private struct LyricChillerAboutLinkRow: View {
     let title: String
     let url: URL
 

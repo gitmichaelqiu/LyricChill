@@ -20,10 +20,10 @@ extension NSScreen {
 }
 
 @main
-struct LyricChillApp: App {
+struct LyricChillerApp: App {
     @State var viewmodel = ViewModel.shared
     @AppStorage("showMenubarIcon") private var isMenuBarIconVisible = true
-    @NSApplicationDelegateAdaptor(LyricChillAppDelegate.self) private var appDelegate
+    @NSApplicationDelegateAdaptor(LyricChillerAppDelegate.self) private var appDelegate
     @Environment(\.openWindow) var openWindow
     @Environment(\.openURL) var openURL
     
@@ -169,7 +169,7 @@ struct LyricChillApp: App {
         }
         .menuBarExtraAccess(isPresented: $viewmodel.isMenuBarWidgetPresented)
         .menuBarExtraStyle(.window)
-        Window("LyricChill: Fullscreen", id: "fullscreen") {
+        Window("LyricChiller: Fullscreen", id: "fullscreen") {
             FullscreenView()
                 .windowFullScreenBehavior(.enabled)
                 .preferredColorScheme(.dark)
@@ -196,7 +196,7 @@ struct LyricChillApp: App {
                 }
         }
         .defaultSize(width: NSScreen.mainWidth, height: NSScreen.mainHeight)
-        Window("Set Up LyricChill", id: "onboarding") {
+        Window("Set Up LyricChiller", id: "onboarding") {
             OnboardingWindow().frame(minWidth: 700, maxWidth: 700, minHeight: 600, maxHeight: 600, alignment: .center)
                 .environment(viewmodel)
                 .preferredColorScheme(.dark)
@@ -213,7 +213,7 @@ struct LyricChillApp: App {
         .windowStyle(.hiddenTitleBar)
         .windowLevel(.floating)
 
-        Window("LyricChill: Searching for \(viewmodel.currentlyPlayingName ?? "-") by \(viewmodel.currentlyPlayingArtist ?? "-")", id: "search") {
+        Window("LyricChiller: Searching for \(viewmodel.currentlyPlayingName ?? "-") by \(viewmodel.currentlyPlayingArtist ?? "-")", id: "search") {
             SearchWindow().frame(minWidth: 700, maxWidth: 700, minHeight: 500, maxHeight: 500, alignment: .center)
                 .environment(viewmodel)
                 .preferredColorScheme(.dark)
@@ -227,7 +227,7 @@ struct LyricChillApp: App {
                 }
         }
         .windowResizability(.contentSize)
-        Window("LyricChill: Update 2.3", id: "update") {
+        Window("LyricChiller: Update 2.3", id: "update") {
             UpdateWindow().frame(minWidth: 700, maxWidth: 700, alignment: .center)
                 .environment(viewmodel)
                 .preferredColorScheme(.dark)
@@ -247,10 +247,10 @@ struct LyricChillApp: App {
 }
 
 @MainActor
-final class LyricChillAppDelegate: NSObject, NSApplicationDelegate {
+final class LyricChillerAppDelegate: NSObject, NSApplicationDelegate {
     func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows: Bool) -> Bool {
         guard !ViewModel.shared.userDefaultStorage.showMenubarIcon else { return false }
-        LyricChillSettingsWindowController.shared.open(viewModel: .shared)
+        LyricChillerSettingsWindowController.shared.open(viewModel: .shared)
         return true
     }
 }

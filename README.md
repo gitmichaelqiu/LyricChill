@@ -1,18 +1,18 @@
-# LyricChill
+# LyricChiller
 
 <img src="logo.png" alt="Logo" width="15%">
 
-LyricChill is a community-maintained continuation of LyricFever, bringing live lyrics to Spotify and Apple Music on macOS.
+LyricChiller is a community-maintained continuation of LyricFever, bringing live lyrics to Spotify and Apple Music on macOS.
 
 ## Installation
 
 ### Manual
-Download the latest build from [LyricChill GitHub Releases](https://github.com/gitmichaelqiu/LyricChill/releases).
+Download the latest build from [LyricChiller GitHub Releases](https://github.com/gitmichaelqiu/LyricChiller/releases).
 
 ## Screenshots
 [lyricfeverad.webm](https://github.com/user-attachments/assets/8881ae23-69d3-4b81-875b-31f12c577fa0)
 
-<img alt="Screenshot of LyricChill's menu bar and floating lyric windows" src="https://github.com/user-attachments/assets/a890b685-b4b4-45cc-918c-1184aa10d1bd" width="50%"/>
+<img alt="Screenshot of LyricChiller's menu bar and floating lyric windows" src="https://github.com/user-attachments/assets/a890b685-b4b4-45cc-918c-1184aa10d1bd" width="50%"/>
 
 <img src="superShy.gif" alt="First Screenshot" width="50%">
 <img src="https://github.com/user-attachments/assets/e3c2c5f1-3d2b-4f7c-9893-d4613340943e" alt="Screenshot 1" width="50%">

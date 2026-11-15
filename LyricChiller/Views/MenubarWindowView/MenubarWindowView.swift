@@ -517,7 +517,7 @@ struct MenubarWindowView: View {
         HStack {
             Button {
                 dismiss()
-                LyricChillSettingsWindowController.shared.open(viewModel: viewmodel)
+                LyricChillerSettingsWindowController.shared.open(viewModel: viewmodel)
             } label: {
                 Image(systemName: "gearshape")
                     .font(.system(size: 15, weight: .medium))

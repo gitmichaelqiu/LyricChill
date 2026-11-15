@@ -2,12 +2,12 @@ import AppKit
 import SwiftUI
 
 @MainActor
-final class LyricChillSettingsWindowController: NSObject, NSWindowDelegate {
-    static let shared = LyricChillSettingsWindowController()
+final class LyricChillerSettingsWindowController: NSObject, NSWindowDelegate {
+    static let shared = LyricChillerSettingsWindowController()
 
     private var windowController: NSWindowController?
 
-    func open(viewModel: ViewModel, tab: LyricChillSettingsTab = .general) {
+    func open(viewModel: ViewModel, tab: LyricChillerSettingsTab = .general) {
         if let windowController, let window = windowController.window {
             configure(window)
             windowController.showWindow(nil)
@@ -25,8 +25,8 @@ final class LyricChillSettingsWindowController: NSObject, NSWindowDelegate {
             defer: false
         )
 
-        window.identifier = NSUserInterfaceItemIdentifier("LyricChillSettingsWindow")
-        window.title = "LyricChill Settings"
+        window.identifier = NSUserInterfaceItemIdentifier("LyricChillerSettingsWindow")
+        window.title = "LyricChiller Settings"
         window.titleVisibility = .hidden
         window.titlebarAppearsTransparent = true
         window.titlebarSeparatorStyle = .none
@@ -34,7 +34,7 @@ final class LyricChillSettingsWindowController: NSObject, NSWindowDelegate {
         window.minSize = NSSize(width: 750, height: 550)
         configure(window)
         window.level = .normal
-        window.contentViewController = LyricChillSettingsHostingController(
+        window.contentViewController = LyricChillerSettingsHostingController(
             viewModel: viewModel,
             initialTab: tab
         )
@@ -65,9 +65,9 @@ final class LyricChillSettingsWindowController: NSObject, NSWindowDelegate {
     }
 }
 
-private final class LyricChillSettingsHostingController: NSHostingController<AnyView> {
-    init(viewModel: ViewModel, initialTab: LyricChillSettingsTab) {
-        let rootView = LyricChillSettingsView(initialTab: initialTab)
+private final class LyricChillerSettingsHostingController: NSHostingController<AnyView> {
+    init(viewModel: ViewModel, initialTab: LyricChillerSettingsTab) {
+        let rootView = LyricChillerSettingsView(initialTab: initialTab)
             .environment(viewModel)
         super.init(rootView: AnyView(rootView))
     }

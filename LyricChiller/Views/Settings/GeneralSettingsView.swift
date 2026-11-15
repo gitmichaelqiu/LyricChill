@@ -1,7 +1,7 @@
 import LaunchAtLogin
 import SwiftUI
 
-struct LyricChillGeneralSettingsView: View {
+struct LyricChillerGeneralSettingsView: View {
     @Environment(ViewModel.self) private var viewModel
     @AppStorage("truncationLength") private var truncationLength = 40
 
@@ -12,7 +12,7 @@ struct LyricChillGeneralSettingsView: View {
             ModularSettingsSection("Menu Bar") {
                 ModularSettingsRow(
                     "Show menu bar icon",
-                    helperText: "Show the LyricChill menu bar icon and controls.",
+                    helperText: "Show the LyricChiller menu bar icon and controls.",
                     keywords: ["icon", "status item", "controls"]
                 ) {
                     Toggle(
@@ -89,7 +89,7 @@ struct LyricChillGeneralSettingsView: View {
             ModularSettingsSection("Updates") {
                 ModularSettingsRow(
                     "Check for updates",
-                    helperText: "Check whether a newer LyricChill version is available.",
+                    helperText: "Check whether a newer LyricChiller version is available.",
                     keywords: ["update", "version"]
                 ) {
                     Button("Check Now") {

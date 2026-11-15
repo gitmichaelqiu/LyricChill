@@ -86,7 +86,7 @@ enum MenubarButtonHighlight {
             case .delete:
                 LocalizedStringKey("Delete Lyrics")
             case .quit:
-                LocalizedStringKey("Quit LyricChill (⌘ + Q)")
+                LocalizedStringKey("Quit LyricChiller (⌘ + Q)")
             case .settings:
                 LocalizedStringKey("Settings")
             case .none:

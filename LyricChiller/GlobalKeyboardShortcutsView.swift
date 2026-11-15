@@ -6,11 +6,11 @@ struct GlobalKeyboardShortcutsView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
             ModularSettingsSection("Global keyboard shortcuts") {
-                ForEach(LyricChillShortcut.allCases) { shortcut in
+                ForEach(LyricChillerShortcut.allCases) { shortcut in
                     if shortcut != .karaoke {
                         Divider()
                     }
-                    LyricChillShortcutRow(shortcut: shortcut)
+                    LyricChillerShortcutRow(shortcut: shortcut)
                 }
             }
         }
@@ -18,7 +18,7 @@ struct GlobalKeyboardShortcutsView: View {
     }
 }
 
-private enum LyricChillShortcut: String, CaseIterable, Identifiable {
+private enum LyricChillerShortcut: String, CaseIterable, Identifiable {
     case karaoke
     case lyrics
     case menuBarWidget
@@ -53,8 +53,8 @@ private enum LyricChillShortcut: String, CaseIterable, Identifiable {
     }
 }
 
-private struct LyricChillShortcutRow: View {
-    let shortcut: LyricChillShortcut
+private struct LyricChillerShortcutRow: View {
+    let shortcut: LyricChillerShortcut
 
     @State private var isListening = false
     @State private var shortcutRevision = 0

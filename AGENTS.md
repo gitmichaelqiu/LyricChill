@@ -2,12 +2,12 @@
 
 ## Project Structure & Module Organization
 
-`LyricFever/` contains the Swift app. Keep related code in its existing areas: `Views/` for SwiftUI screens and controls, `Models/` for data and parsing, `Players/` for Apple Music and Spotify integration, `LyricProvider/` for lyric sources, and `Services/` for supporting services. Settings screens and the vendored UILibrary components are under `Views/Settings/`. `Support Files/` holds assets, entitlements, and app configuration. The Core Data model is under `Models/CoreData/`; `Localizable.xcstrings` contains app translations. The Xcode project and shared scheme are in `LyricChill.xcodeproj/`.
+`LyricChiller/` contains the Swift app. Keep related code in its existing areas: `Views/` for SwiftUI screens and controls, `Models/` for data and parsing, `Players/` for Apple Music and Spotify integration, `LyricProvider/` for lyric sources, and `Services/` for supporting services. Settings screens and the vendored UILibrary components are under `Views/Settings/`. `Support Files/` holds assets, entitlements, and app configuration. The Core Data model is under `Models/CoreData/`; `Localizable.xcstrings` contains app translations. The Xcode project and shared scheme are in `LyricChiller.xcodeproj/`.
 
 ## Build, Test, and Development Commands
 
-- `open LyricChill.xcodeproj` opens the project in Xcode; select the `LyricChill` scheme to run the app.
-- `xcodebuild -project LyricChill.xcodeproj -scheme LyricChill -configuration Debug build` builds the macOS app from the command line. Xcode resolves Swift Package Manager dependencies during the build.
+- `open LyricChiller.xcodeproj` opens the project in Xcode; select the `LyricChiller` scheme to run the app.
+- `xcodebuild -project LyricChiller.xcodeproj -scheme LyricChiller -configuration Debug build` builds the macOS app from the command line. Xcode resolves Swift Package Manager dependencies during the build.
 - There is currently no dedicated test target or test directory. For behavior changes, run the app from Xcode and manually check the affected flow, such as playback detection, lyric fetching, or the relevant view.
 
 ## Coding Style & Naming Conventions

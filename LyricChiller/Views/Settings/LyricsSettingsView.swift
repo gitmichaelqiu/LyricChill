@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct LyricChillLyricsSettingsView: View {
+struct LyricChillerLyricsSettingsView: View {
     @Environment(ViewModel.self) private var viewModel
     @State private var showingSpotifyConnection = false
 
@@ -11,7 +11,7 @@ struct LyricChillLyricsSettingsView: View {
             ModularSettingsSection("Lyrics") {
                 ModularSettingsRow(
                     "Primary lyric source",
-                    helperText: "LyricChill tries this source first, then falls back to other available providers.",
+                    helperText: "LyricChiller tries this source first, then falls back to other available providers.",
                     keywords: ["LRCLIB", "Spotify", "NetEase", "provider"]
                 ) {
                     Picker("", selection: $viewModel.userDefaultStorage.lyricSourcePreference) {

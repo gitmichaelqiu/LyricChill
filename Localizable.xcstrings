@@ -69,7 +69,7 @@
         }
       }
     },
-    "[LyricChill GitHub](https://github.com/gitmichaelqiu/LyricChill)" : {
+    "[LyricChiller GitHub](https://github.com/gitmichaelqiu/LyricChiller)" : {
 
     },
     "%@, %lld pt" : {
@@ -423,7 +423,7 @@
     "Choose Spotify or Apple Music as your playback app" : {
 
     },
-    "Choose the app LyricChill reads playback information from." : {
+    "Choose the app LyricChiller reads playback information from." : {
 
     },
     "Choose the maximum number of characters shown in the menu bar." : {
@@ -966,29 +966,29 @@
     "Lyric" : {
 
     },
-    "LyricChill" : {
+    "LyricChiller" : {
 
     },
-    "LyricChill needs permission to read the selected music app's playback state." : {
+    "LyricChiller needs permission to read the selected music app's playback state." : {
 
     },
-    "LyricChill tries this source first, then falls back to other available providers." : {
+    "LyricChiller tries this source first, then falls back to other available providers." : {
 
     },
-    "LyricChill: Fullscreen" : {
+    "LyricChiller: Fullscreen" : {
 
     },
-    "LyricChill: Searching for %@ by %@" : {
+    "LyricChiller: Searching for %@ by %@" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "LyricChill: Searching for %1$@ by %2$@"
+            "value" : "LyricChiller: Searching for %1$@ by %2$@"
           }
         }
       }
     },
-    "LyricChill: Update 2.3" : {
+    "LyricChiller: Update 2.3" : {
 
     },
     "Lyrics" : {
@@ -1700,7 +1700,7 @@
         }
       }
     },
-    "Quit LyricChill (⌘ + Q)" : {
+    "Quit LyricChiller (⌘ + Q)" : {
 
     },
     "Ready" : {
@@ -1890,7 +1890,7 @@
         }
       }
     },
-    "Set Up LyricChill" : {
+    "Set Up LyricChiller" : {
 
     },
     "Settings" : {

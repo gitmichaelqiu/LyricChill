@@ -1,6 +1,6 @@
 import SwiftUI
 
-enum LyricChillSettingsTab: String, CaseIterable, Identifiable {
+enum LyricChillerSettingsTab: String, CaseIterable, Identifiable {
     case general
     case playback
     case lyrics
@@ -37,7 +37,7 @@ enum LyricChillSettingsTab: String, CaseIterable, Identifiable {
     }
 }
 extension Notification.Name {
-    static let lyricChillSettingsTabRequested = Notification.Name("LyricChill.settingsTabRequested")
+    static let lyricChillSettingsTabRequested = Notification.Name("LyricChiller.settingsTabRequested")
 }
 
 private let settingsSidebarWidth: CGFloat = 180
@@ -47,15 +47,15 @@ private let settingsSidebarRowHeight: CGFloat = 32
 private let settingsSidebarFontSize: CGFloat = 16
 private let settingsTitleHeaderHeight: CGFloat = 48
 
-struct LyricChillSettingsView: View {
+struct LyricChillerSettingsView: View {
     @Environment(ViewModel.self) private var viewModel
     @StateObject private var navigationState = ModularSettingsNavigationState()
-    @State private var selectedTab: LyricChillSettingsTab? = .general
+    @State private var selectedTab: LyricChillerSettingsTab? = .general
     @State private var searchText = ""
     @State private var isIndexingSettings = true
     @FocusState private var isSearchFieldFocused: Bool
 
-    init(initialTab: LyricChillSettingsTab = .general) {
+    init(initialTab: LyricChillerSettingsTab = .general) {
         _selectedTab = State(initialValue: initialTab)
     }
 
@@ -69,22 +69,22 @@ struct LyricChillSettingsView: View {
 
             if isIndexingSettings {
                 ZStack {
-                    LyricChillGeneralSettingsView()
+                    LyricChillerGeneralSettingsView()
                         .environment(viewModel)
-                        .environment(\.modularSettingsTab, LyricChillSettingsTab.general.modularTab)
-                    LyricChillPlaybackSettingsView()
+                        .environment(\.modularSettingsTab, LyricChillerSettingsTab.general.modularTab)
+                    LyricChillerPlaybackSettingsView()
                         .environment(viewModel)
-                        .environment(\.modularSettingsTab, LyricChillSettingsTab.playback.modularTab)
-                    LyricChillLyricsSettingsView()
+                        .environment(\.modularSettingsTab, LyricChillerSettingsTab.playback.modularTab)
+                    LyricChillerLyricsSettingsView()
                         .environment(viewModel)
-                        .environment(\.modularSettingsTab, LyricChillSettingsTab.lyrics.modularTab)
+                        .environment(\.modularSettingsTab, LyricChillerSettingsTab.lyrics.modularTab)
                     KaraokeSettingsView()
                         .environment(viewModel)
-                        .environment(\.modularSettingsTab, LyricChillSettingsTab.karaoke.modularTab)
+                        .environment(\.modularSettingsTab, LyricChillerSettingsTab.karaoke.modularTab)
                     GlobalKeyboardShortcutsView()
-                        .environment(\.modularSettingsTab, LyricChillSettingsTab.shortcuts.modularTab)
-                    LyricChillAboutSettingsView()
-                        .environment(\.modularSettingsTab, LyricChillSettingsTab.about.modularTab)
+                        .environment(\.modularSettingsTab, LyricChillerSettingsTab.shortcuts.modularTab)
+                    LyricChillerAboutSettingsView()
+                        .environment(\.modularSettingsTab, LyricChillerSettingsTab.about.modularTab)
                 }
                 .environmentObject(navigationState)
                 .environment(\.isModularSettingsPreRendering, true)
@@ -110,7 +110,7 @@ struct LyricChillSettingsView: View {
         }
         .onReceive(NotificationCenter.default.publisher(for: .lyricChillSettingsTabRequested)) { notification in
             clearSearchFocus()
-            guard let tab = notification.object as? LyricChillSettingsTab else { return }
+            guard let tab = notification.object as? LyricChillerSettingsTab else { return }
             searchText = ""
             selectedTab = tab
         }
@@ -121,10 +121,10 @@ struct LyricChillSettingsView: View {
         }
     }
 
-    private var filteredTabs: [LyricChillSettingsTab] {
-        guard !searchText.isEmpty else { return LyricChillSettingsTab.allCases }
+    private var filteredTabs: [LyricChillerSettingsTab] {
+        guard !searchText.isEmpty else { return LyricChillerSettingsTab.allCases }
         let query = searchText.lowercased()
-        return LyricChillSettingsTab.allCases.filter { tab in
+        return LyricChillerSettingsTab.allCases.filter { tab in
             let matchesTabName = tab.rawValue.lowercased().contains(query)
                 || String(localized: tab.localizedName).lowercased().contains(query)
             let matchesSetting = navigationState.registeredItems.contains { item in
@@ -300,7 +300,7 @@ struct LyricChillSettingsView: View {
     }
 
     @ViewBuilder
-    private func sidebarItem(for tab: LyricChillSettingsTab) -> some View {
+    private func sidebarItem(for tab: LyricChillerSettingsTab) -> some View {
         NavigationLink(value: tab) {
             Label {
                 Text(String(localized: tab.localizedName))
@@ -320,19 +320,19 @@ struct LyricChillSettingsView: View {
     }
 
     @ViewBuilder
-    private func tabContent(for tab: LyricChillSettingsTab) -> some View {
+    private func tabContent(for tab: LyricChillerSettingsTab) -> some View {
         switch tab {
         case .general:
             ModularSettingsContainer(tab.modularTab) {
-                LyricChillGeneralSettingsView().environment(viewModel)
+                LyricChillerGeneralSettingsView().environment(viewModel)
             }
         case .playback:
             ModularSettingsContainer(tab.modularTab) {
-                LyricChillPlaybackSettingsView().environment(viewModel)
+                LyricChillerPlaybackSettingsView().environment(viewModel)
             }
         case .lyrics:
             ModularSettingsContainer(tab.modularTab) {
-                LyricChillLyricsSettingsView().environment(viewModel)
+                LyricChillerLyricsSettingsView().environment(viewModel)
             }
         case .karaoke:
             ModularSettingsContainer(tab.modularTab) {
@@ -344,7 +344,7 @@ struct LyricChillSettingsView: View {
             }
         case .about:
             ModularSettingsContainer(tab.modularTab) {
-                LyricChillAboutSettingsView()
+                LyricChillerAboutSettingsView()
             }
         }
     }
