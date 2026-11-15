@@ -22,6 +22,10 @@ struct LyricChillerSetupOnboardingView: View {
         return viewModel.currentPlayerInstance.isRunning
     }
 
+    private var selectedMusicAppName: String {
+        usesAppleMusic ? String(localized: "Apple Music") : String(localized: "Spotify")
+    }
+
     var body: some View {
         @Bindable var viewModel = viewModel
 
@@ -86,47 +90,80 @@ struct LyricChillerSetupOnboardingView: View {
             VStack(alignment: .leading, spacing: 8) {
                 Text("Choose your music app")
                     .font(.system(size: 28, weight: .bold, design: .rounded))
-                Text("LyricChiller reads the current track from the player you select.")
+                Text("LyricChiller uses this app to find the song you’re listening to and show its lyrics.")
                     .foregroundStyle(.secondary)
             }
 
-            Picker("Music app", selection: $usesAppleMusic) {
-                Text("Spotify").tag(false)
-                Text("Apple Music").tag(true)
+            HStack {
+                Text("Music app")
+                    .font(.headline)
+                Spacer()
+                MusicAppPicker(selection: $usesAppleMusic)
             }
-            .pickerStyle(.segmented)
-            .frame(maxWidth: 360)
+            .padding(12)
+            .background(Color.secondary.opacity(0.08), in: RoundedRectangle(cornerRadius: 12))
 
             HStack(spacing: 12) {
                 Image(systemName: playerIsAuthorized ? "checkmark.circle.fill" : "exclamationmark.triangle.fill")
                     .foregroundStyle(playerIsAuthorized ? Color.green : Color.orange)
                     .font(.title2)
+                    .accessibilityHidden(true)
 
                 VStack(alignment: .leading, spacing: 3) {
-                    Text(playerIsAuthorized ? "Player access is ready" : playerIsRunning ? "Allow player access" : "Open the selected music app")
+                    playerAccessTitle
                         .font(.headline)
-                    Text(playerIsAuthorized
-                         ? "Playback information is available to LyricChiller."
-                         : "macOS may ask you to allow LyricChiller to control the selected app.")
+                    playerAccessDescription
                         .font(.callout)
                         .foregroundStyle(.secondary)
                 }
 
                 Spacer()
 
-                Button("Automation Settings") {
-                    guard let url = URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_Automation") else { return }
-                    NSWorkspace.shared.open(url)
+                if playerIsRunning && !playerIsAuthorized {
+                    Button("Open System Settings") {
+                        _ = viewModel.currentPlayerInstance.isAuthorized
+                        guard let url = URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_Automation") else { return }
+                        NSWorkspace.shared.open(url)
+                    }
                 }
             }
             .padding(16)
             .background(Color.secondary.opacity(0.08), in: RoundedRectangle(cornerRadius: 12))
 
-            Text("You can change the selected player later in Settings → Playback.")
+            if playerIsRunning && !playerIsAuthorized {
+                Text("If macOS asks, click Allow. If you previously denied access, open System Settings → Privacy & Security → Automation and enable \(selectedMusicAppName) for LyricChiller.")
+                    .font(.callout)
+                    .foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+
+            Text("You can change the music app later in Settings → Playback.")
                 .font(.callout)
                 .foregroundStyle(.secondary)
         }
         .padding(.horizontal, 56)
+    }
+
+    @ViewBuilder
+    private var playerAccessTitle: some View {
+        if playerIsAuthorized {
+            Text("You’re all set")
+        } else if playerIsRunning {
+            Text("Allow LyricChiller to read playback")
+        } else {
+            Text("Open \(selectedMusicAppName) and start a song")
+        }
+    }
+
+    @ViewBuilder
+    private var playerAccessDescription: some View {
+        if playerIsAuthorized {
+            Text("LyricChiller can read the song title, artist, and playback position.")
+        } else if playerIsRunning {
+            Text("LyricChiller needs permission to read the current song and playback position.")
+        } else {
+            Text("When macOS asks to let LyricChiller read playback, click Allow.")
+        }
     }
 
     private var lyricsPage: some View {

@@ -19,28 +19,16 @@ struct LyricChillerPlaybackSettingsView: View {
                     helperText: "Choose the app LyricChiller reads playback information from.",
                     keywords: ["Spotify", "Apple Music", "player"]
                 ) {
-                    if #available(macOS 26.0, *) {
-                        MusicAppPicker(selection: $spotifyOrAppleMusic)
-                            .fixedSize(horizontal: true, vertical: false)
-                            .accessibilityLabel("Music app")
-                    } else {
-                        Picker("Music app", selection: $spotifyOrAppleMusic) {
-                            Text("Spotify").tag(false)
-                            Text("Apple Music").tag(true)
-                        }
-                        .labelsHidden()
-                        .pickerStyle(.segmented)
-                        .controlSize(.large)
-                    }
+                    MusicAppPicker(selection: $spotifyOrAppleMusic)
                 }
 
                 Divider()
 
                 ModularSettingsRow(
                     "Player access",
-                    helperText: "LyricChiller needs permission to read the selected music app's playback state.",
+                    helperText: "To show lyrics, LyricChiller needs permission to read the current song from the selected music app.",
                     warningText: playerIsRunning && !playerIsAuthorized
-                        ? "Open the selected player and grant LyricChiller access in Automation Settings."
+                        ? "If access was denied, open System Settings → Privacy & Security → Automation and enable the selected music app for LyricChiller."
                         : nil,
                     keywords: ["permission", "authorization"]
                 ) {
@@ -53,17 +41,19 @@ struct LyricChillerPlaybackSettingsView: View {
                                 .accessibilityLabel("Player not running")
                         }
 
-                        Text(playerIsAuthorized ? "Ready" : playerIsRunning ? "Setup required" : "Player not running")
+                        Text(playerIsAuthorized ? "Ready" : playerIsRunning ? "Permission needed" : "Player not running")
                             .foregroundStyle(.secondary)
                             .lineLimit(1)
                             .fixedSize(horizontal: true, vertical: false)
 
-                        Button("Open Setup") {
-                            _ = viewModel.currentPlayerInstance.isAuthorized
-                            guard let settingsURL = URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_Automation") else {
-                                return
+                        if playerIsRunning && !playerIsAuthorized {
+                            Button("Open System Settings") {
+                                _ = viewModel.currentPlayerInstance.isAuthorized
+                                guard let settingsURL = URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_Automation") else {
+                                    return
+                                }
+                                NSWorkspace.shared.open(settingsURL)
                             }
-                            NSWorkspace.shared.open(settingsURL)
                         }
                     }
                 }
@@ -121,55 +111,6 @@ struct LyricChillerPlaybackSettingsView: View {
         .onReceive(NotificationCenter.default.publisher(for: NSApplication.didBecomeActiveNotification)) { _ in
             playerAccessRevision += 1
             viewModel.refreshPlayerAuthorization()
-        }
-    }
-}
-
-@available(macOS 26.0, *)
-private struct MusicAppPicker: NSViewRepresentable {
-    @Binding var selection: Bool
-
-    func makeCoordinator() -> Coordinator {
-        Coordinator(selection: $selection)
-    }
-
-    func makeNSView(context: Context) -> NSSegmentedControl {
-        let control = NSSegmentedControl()
-        control.segmentCount = 2
-        control.trackingMode = .selectOne
-        control.segmentStyle = .automatic
-        control.controlSize = .regular
-        control.borderShape = .capsule
-        control.segmentDistribution = .fit
-
-        if #available(macOS 27.0, *) {
-            control.role = .tabs
-        }
-
-        control.setLabel(String(localized: "Spotify"), forSegment: 0)
-        control.setLabel(String(localized: "Apple Music"), forSegment: 1)
-        control.target = context.coordinator
-        control.action = #selector(Coordinator.selectionChanged(_:))
-        control.selectedSegment = selection ? 1 : 0
-        return control
-    }
-
-    func updateNSView(_ control: NSSegmentedControl, context: Context) {
-        context.coordinator.selection = $selection
-        control.selectedSegment = selection ? 1 : 0
-    }
-
-    @MainActor
-    final class Coordinator: NSObject {
-        var selection: Binding<Bool>
-
-        init(selection: Binding<Bool>) {
-            self.selection = selection
-        }
-
-        @objc func selectionChanged(_ sender: NSSegmentedControl) {
-            guard (0..<2).contains(sender.selectedSegment) else { return }
-            selection.wrappedValue = sender.selectedSegment == 1
         }
     }
 }
