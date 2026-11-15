@@ -213,7 +213,10 @@ import MediaRemoteAdapter
     var romanizedLyrics: [String] = []
     var chineseConversionLyrics: [String] = []
     var translatedLyric: [String] = []
-    var showLyrics = true
+    var showLyrics: Bool {
+        get { userDefaultStorage.showLyricsInMenubar }
+        set { userDefaultStorage.showLyricsInMenubar = newValue }
+    }
     #if os(macOS)
     var fullscreen = false
     var spotifyConnectDelay: Bool {

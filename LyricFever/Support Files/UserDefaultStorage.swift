@@ -13,6 +13,8 @@ import ObservableUserDefault
 class UserDefaultStorage {
     @ObservableUserDefault(.init(key: "translate", defaultValue: false, store: .standard))
     @ObservationIgnored var translate: Bool
+    @ObservableUserDefault(.init(key: "showLyricsInMenubar", defaultValue: true, store: .standard))
+    @ObservationIgnored var showLyricsInMenubar: Bool
     @ObservableUserDefault(.init(key: "translationTargetLanguage", store: .standard))
     @ObservationIgnored var translationTargetLanguage: Locale.Language?
     #if os(macOS)
