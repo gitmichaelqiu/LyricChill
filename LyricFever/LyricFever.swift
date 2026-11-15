@@ -38,26 +38,8 @@ struct LyricChillApp: App {
             MenubarLabelView()
                 .environment(viewmodel)
             .task(id: viewmodel.currentlyPlaying) {
-                if viewmodel.currentPlayer == .appleMusic {
-                    print("Ignoring currentlyPlaying task because Apple Music album art workaround is active. Apple please fix AppleScript support on Apple Music pleaasee.")
-                    return
-                }
-                if viewmodel.currentlyPlaying == nil {
-                    print("Incorrect task fired. Ignored on nil currentlyPlaying value")
-                    return
-                }
-                print("Artwork Fetch Service:Fetching new artwork image for currentlyPlaying change")
-                if let artworkImage = await viewmodel.currentPlayerInstance.artworkImage {
-                    print("Artwork Fetch Service: Fetched from player")
-                    viewmodel.artworkImage = artworkImage
-                } else if let artistName = viewmodel.currentlyPlayingArtist, let currentAlbumName = viewmodel.currentAlbumName {
-                    if let mbid = await MusicBrainzArtworkService.findMbid(albumName: currentAlbumName, artistName: artistName) {
-                        print("Artwork Fetch Service: MusicBrainz Success")
-                        viewmodel.artworkImage = await MusicBrainzArtworkService.artworkImage(for: mbid)
-                    }
-                } else {
-                    print("Artwork Fetch Service: couldn't grab mbid image nor player image")
-                }
+                guard let trackID = viewmodel.currentlyPlaying else { return }
+                await viewmodel.loadArtwork(for: trackID)
             }
             .task(id: viewmodel.userDefaultStorage.latestUpdateWindowShown) {
                 if viewmodel.userDefaultStorage.latestUpdateWindowShown < 33 {

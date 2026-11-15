@@ -18,12 +18,18 @@ import AppKit
 
 class MusicBrainzArtworkService {
     static func findMbid(albumName: String, artistName: String) async -> String? {
-//        https://musicbrainz.org/ws/2/release/?query=artist:charli%20xcx%20AND%20album:super%20ultra&fmt=json
-        if let mbidUrl = URL(string: "https://musicbrainz.org/ws/2/release/?query=artist:\(artistName) AND album:\(albumName)&fmt=json"), let mbidData = try? await URLSession.shared.data(from: mbidUrl), let mbidResponse = try? JSONDecoder().decode(MusicBrainzReply.self, from: mbidData.0), let mbid = mbidResponse.releases.first?.id {
-            return mbid
+        var components = URLComponents(string: "https://musicbrainz.org/ws/2/release/")
+        components?.queryItems = [
+            URLQueryItem(name: "query", value: "artist:\"\(artistName)\" AND release:\"\(albumName)\""),
+            URLQueryItem(name: "fmt", value: "json")
+        ]
+
+        guard let url = components?.url,
+              let (data, _) = try? await URLSession.shared.data(from: url),
+              let response = try? JSONDecoder().decode(MusicBrainzReply.self, from: data) else {
+            return nil
         }
-        
-        return nil
+        return response.releases.first?.id
     }
     
     static func artworkUrl(_ mbid: String) -> URL? {

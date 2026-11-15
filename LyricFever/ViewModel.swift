@@ -26,6 +26,7 @@ import MediaRemoteAdapter
     // Apple Music Tahoe broken AppleScript workaround
     let musicController = MediaController()
     private var isAppleMusicArtworkListenerRunning = false
+    private var artworkTrackID: String?
 
     var currentlyPlaying: String?
     
@@ -62,14 +63,17 @@ import MediaRemoteAdapter
                 guard data?.payload.applicationName == "Music" else {
                     return
                 }
-                guard let artwork = data?.payload.artwork else {
-                    if self.currentlyPlaying == nil {
-                        self.artworkImage = nil
-                    }
-                    print("Apple Music Artwork Workaround: Ignoring No Artwork")
+                guard let payload = data?.payload else { return }
+                self.appleMusicPlayer.artworkImage = payload.artwork
+                guard self.matchesCurrentAppleMusicTrack(payload) else {
+                    print("Apple Music Artwork Workaround: Ignoring artwork for a different track")
                     return
                 }
-                self.artworkImage = artwork
+                if let trackID = self.currentlyPlaying,
+                   self.currentlyPlayingName != nil,
+                   let artwork = payload.artwork {
+                    self.applyArtwork(artwork, for: trackID)
+                }
             }
             // This will only be called for Apple Music events
         }
@@ -95,6 +99,73 @@ import MediaRemoteAdapter
         }
         let artistName = currentlyPlayingArtist?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
         return "apple-music:\(artistName):\(trackName)"
+    }
+
+    private func matchesCurrentAppleMusicTrack(_ payload: TrackInfo.Payload) -> Bool {
+        guard let currentTitle = currentlyPlayingName?.trimmingCharacters(in: .whitespacesAndNewlines),
+              !currentTitle.isEmpty else {
+            return true
+        }
+
+        func matches(_ incoming: String?, _ current: String?) -> Bool {
+            guard let incoming = incoming?.trimmingCharacters(in: .whitespacesAndNewlines),
+                  !incoming.isEmpty,
+                  let current = current?.trimmingCharacters(in: .whitespacesAndNewlines),
+                  !current.isEmpty else {
+                return true
+            }
+            return incoming.localizedCaseInsensitiveCompare(current) == .orderedSame
+        }
+
+        return matches(payload.title, currentTitle)
+            && matches(payload.artist, currentlyPlayingArtist)
+            && matches(payload.album, currentAlbumName)
+    }
+
+    func loadArtwork(for trackID: String) async {
+        guard currentlyPlaying == trackID else { return }
+        prepareArtwork(for: trackID)
+
+        if artworkImage != nil { return }
+
+        if let image = await currentPlayerInstance.artworkImage {
+            applyArtwork(image, for: trackID)
+            return
+        }
+
+        guard let artistName = currentlyPlayingArtist,
+              let albumName = currentAlbumName,
+              let mbid = await MusicBrainzArtworkService.findMbid(albumName: albumName, artistName: artistName),
+              currentlyPlaying == trackID,
+              let image = await MusicBrainzArtworkService.artworkImage(for: mbid) else {
+            return
+        }
+        applyArtwork(image, for: trackID)
+    }
+
+    private func applyArtwork(_ image: NSImage, for trackID: String) {
+        guard currentlyPlaying == trackID else { return }
+        if artworkTrackID == trackID, artworkImage != nil {
+            artworkImage = image
+            return
+        }
+        artworkTrackID = trackID
+        artworkImage = image
+
+        let color = image.findWhiteTextLegibleMostSaturatedDominantColor()
+        guard currentlyPlaying == trackID else { return }
+        ColorDataService.saveColorToCoreData(trackID: trackID, songColor: color)
+        currentBackground = intToRGB(color)
+    }
+
+    private func prepareArtwork(for trackID: String?) {
+        guard artworkTrackID != trackID else { return }
+        artworkTrackID = trackID
+        artworkImage = nil
+        currentBackground = nil
+        if trackID != nil {
+            setBackgroundColor()
+        }
     }
     
     func formattedCurrentTime(for date: Date) -> String {
@@ -754,6 +825,7 @@ import MediaRemoteAdapter
     }
     
     func onCurrentlyPlayingIDChange() async {
+        prepareArtwork(for: currentlyPlaying)
         currentlyPlayingLyricsIndex = nil
         currentlyPlayingLyrics = []
         translatedLyric = []
@@ -822,6 +894,7 @@ import MediaRemoteAdapter
         isPlaying = false
         isStopped = true
         artworkImage = nil
+        artworkTrackID = nil
         currentBackground = nil
         currentlyPlayingLyrics = []
         currentlyPlayingLyricsIndex = nil
