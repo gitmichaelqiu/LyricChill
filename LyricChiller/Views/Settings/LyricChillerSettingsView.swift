@@ -53,6 +53,7 @@ struct LyricChillerSettingsView: View {
     @State private var selectedTab: LyricChillerSettingsTab? = .general
     @State private var searchText = ""
     @State private var isIndexingSettings = true
+    @AppStorage("hasCompletedSetupOnboarding") private var hasCompletedSetupOnboarding = false
     @FocusState private var isSearchFieldFocused: Bool
 
     init(initialTab: LyricChillerSettingsTab = .general) {
@@ -93,6 +94,13 @@ struct LyricChillerSettingsView: View {
                 .allowsHitTesting(false)
                 .accessibilityHidden(true)
             }
+
+            if shouldShowSetupOnboarding {
+                LyricChillerSetupOnboardingView(onFinish: completeSetupOnboarding)
+                    .environment(viewModel)
+                    .frame(width: settingsWindowWidth, height: settingsWindowHeight)
+                    .zIndex(1)
+            }
         }
         .environmentObject(navigationState)
         .navigationTitle("")
@@ -119,6 +127,16 @@ struct LyricChillerSettingsView: View {
                 isIndexingSettings = false
             }
         }
+    }
+
+    private var shouldShowSetupOnboarding: Bool {
+        !hasCompletedSetupOnboarding
+    }
+
+    private func completeSetupOnboarding() {
+        viewModel.refreshPlayerAuthorization()
+        hasCompletedSetupOnboarding = true
+        selectedTab = .playback
     }
 
     private var filteredTabs: [LyricChillerSettingsTab] {
