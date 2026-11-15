@@ -12,7 +12,6 @@ struct LyricChillerGeneralSettingsView: View {
             ModularSettingsSection("Menu Bar") {
                 ModularSettingsRow(
                     "Show menu bar icon",
-                    helperText: "Show the LyricChiller menu bar icon and controls.",
                     keywords: ["icon", "status item", "controls"]
                 ) {
                     Toggle(
@@ -89,7 +88,6 @@ struct LyricChillerGeneralSettingsView: View {
             ModularSettingsSection("Updates") {
                 ModularSettingsRow(
                     "Check for updates",
-                    helperText: "Check whether a newer LyricChiller version is available.",
                     keywords: ["update", "version"]
                 ) {
                     Button("Check Now") {
