@@ -133,7 +133,8 @@ class SpotifyLyricProvider: LyricProvider {
                     do {
                         let errorWrap = try JSONDecoder().decode(ErrorWrapper.self, from: accessTokenData.0)
                         if errorWrap.error.code == 401 {
-                            UserDefaults().set(false, forKey: "hasOnboarded")
+                            ViewModel.shared.userDefaultStorage.cookie = ""
+                            accessToken = nil
                         }
                     } catch {
                         // silently fail

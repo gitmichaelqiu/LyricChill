@@ -120,6 +120,7 @@ struct LyricChillerPlaybackSettingsView: View {
         .frame(maxWidth: .infinity, alignment: .topLeading)
         .onReceive(NotificationCenter.default.publisher(for: NSApplication.didBecomeActiveNotification)) { _ in
             playerAccessRevision += 1
+            viewModel.refreshPlayerAuthorization()
         }
     }
 }

@@ -61,8 +61,6 @@ class UserDefaultStorage {
     #if os(macOS)
     @ObservableUserDefault(.init(key: "spotifyOrAppleMusic", defaultValue: false, store: .standard))
     @ObservationIgnored var spotifyOrAppleMusic: Bool
-    @ObservableUserDefault(.init(key: "latestUpdateWindowShown", defaultValue: 0, store: .standard))
-    @ObservationIgnored var latestUpdateWindowShown: Int
     #endif
     @ObservableUserDefault(.init(key: "hasOnboarded", defaultValue: false, store: .standard))
     @ObservationIgnored var hasOnboarded: Bool

@@ -14,7 +14,7 @@ struct MenubarLabelView: View {
         // Update message takes priority
         if viewmodel.mustUpdateUrgent {
             return String(localized: "⚠️ Please Update (Click Check Updates)")
-        } else if viewmodel.userDefaultStorage.hasOnboarded {
+        } else {
             // Try to work through lyric logic if onboarded
             // Revert to song name in fullscreen mode, where lyrics are shown in the window.
             if !viewmodel.fullscreen, viewmodel.isPlaying, viewmodel.showLyrics, let currentlyPlayingLyricsIndex = viewmodel.currentlyPlayingLyricsIndex {
@@ -41,11 +41,8 @@ struct MenubarLabelView: View {
                     return String(localized: "Now Paused: \(currentlyPlayingName) - \(currentlyPlayingArtist)")
                 }
             }
-            // Onboarded but app is not open
+            // No song details are available.
             return nil
-        } else {
-            // Hasn't onboarded
-            return String(localized: "⚠️ Complete Setup (Click Settings)")
         }
     }
 

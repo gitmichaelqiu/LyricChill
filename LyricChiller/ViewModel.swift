@@ -457,13 +457,11 @@ import MediaRemoteAdapter
         Task {
             mustUpdateUrgent = await updaterService.urgentUpdateExists
         }
+
+        registerGlobalKeyboardShortcuts()
         
-        // onAppear()
-        print("on appear running")
-        if userDefaultStorage.latestUpdateWindowShown < 23 {
-            return
-        }
         #endif
+        refreshPlayerAuthorization()
         guard userDefaultStorage.hasOnboarded else {
             return
         }
@@ -473,7 +471,10 @@ import MediaRemoteAdapter
         print("Application just started. lets check whats playing")
         
         isPlaying = currentPlayerInstance.isPlaying
-        userDefaultStorage.hasOnboarded = currentPlayerInstance.isAuthorized
+    }
+
+    #if os(macOS)
+    private func registerGlobalKeyboardShortcuts() {
         KeyboardShortcuts.onKeyUp(for: .init("karaoke")) { [self] in
             userDefaultStorage.karaoke.toggle()
         }
@@ -489,11 +490,8 @@ import MediaRemoteAdapter
         KeyboardShortcuts.onKeyUp(for: .init("fullscreen")) { [self] in
             displayFullscreen.toggle()
         }
-        guard userDefaultStorage.hasOnboarded else {
-            return
-        }
-        
     }
+    #endif
     
     @MainActor
     func fetchAllNetworkLyrics() async -> NetworkFetchReturn {
@@ -618,12 +616,6 @@ import MediaRemoteAdapter
         }
     }
     
-    func openSettings(_ openWindow: OpenWindowAction) {
-        openWindow(id: "onboarding")
-        NSApplication.shared.activate(ignoringOtherApps: true)
-//        // send notification to check auth
-//        NotificationCenter.default.post(name: Notification.Name("didClickSettings"), object: nil)
-    }
     #endif
     
     func toggleLyrics() {
@@ -822,6 +814,10 @@ import MediaRemoteAdapter
     
     func onAppear(_ openWindow: OpenWindowAction) {
         setCurrentProperties()
+    }
+
+    func refreshPlayerAuthorization() {
+        userDefaultStorage.hasOnboarded = currentPlayerInstance.isAuthorized
     }
     
     func onCurrentlyPlayingIDChange() async {

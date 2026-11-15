@@ -41,28 +41,14 @@ struct LyricChillerApp: App {
                 guard let trackID = viewmodel.currentlyPlaying else { return }
                 await viewmodel.loadArtwork(for: trackID)
             }
-            .task(id: viewmodel.userDefaultStorage.latestUpdateWindowShown) {
-                if viewmodel.userDefaultStorage.latestUpdateWindowShown < 33 {
-                    NSApplication.shared.activate(ignoringOtherApps: true)
-                    openWindow(id: "update")
-                    viewmodel.userDefaultStorage.latestUpdateWindowShown = 33
-                }
-            }
             .task(id: viewmodel.userDefaultStorage.hasOnboarded) {
-                if !viewmodel.userDefaultStorage.hasOnboarded {
-                    NSApplication.shared.activate(ignoringOtherApps: true)
-                    openWindow(id: "onboarding")
-                } else {
-                    guard !viewmodel.isFirstFetch else {
-                        print("Onboarding Task: ignoring false runtime call, cannot refresh as first fetch")
-                        return
-                    }
-                    // make refreshLyrics use the same Task<> that fetch(_) uses
-                    do {
-                        try await viewmodel.refreshLyrics()
-                    } catch {
-                        print("Couldn't refresh lyrics on hasOnboarding: \(error)")
-                    }
+                guard viewmodel.userDefaultStorage.hasOnboarded, !viewmodel.isFirstFetch else {
+                    return
+                }
+                do {
+                    try await viewmodel.refreshLyrics()
+                } catch {
+                    print("Couldn't refresh lyrics after player authorization changed: \(error)")
                 }
             }
             .onChange(of: viewmodel.showLyrics) {
@@ -95,6 +81,9 @@ struct LyricChillerApp: App {
             .onReceive(NotificationCenter.default.publisher(for: NSApplication.willTerminateNotification)) { _ in
                 viewmodel.saveKaraokeFontOnTermination()
             }
+            .onReceive(NotificationCenter.default.publisher(for: NSApplication.didBecomeActiveNotification)) { _ in
+                viewmodel.refreshPlayerAuthorization()
+            }
             .onChange(of: viewmodel.translationSourceLanguage) {
                 // don't call reloadTranslationConfigIfTranslating(), that invalidates when config is the same
                 if viewmodel.userDefaultStorage.translate {
@@ -122,8 +111,7 @@ struct LyricChillerApp: App {
             }
             .onChange(of: viewmodel.currentPlayer) {
                 viewmodel.syncAppleMusicArtworkListener()
-                print("Setting hasOnboarded to false due to player change")
-                viewmodel.userDefaultStorage.hasOnboarded = false
+                viewmodel.refreshPlayerAuthorization()
             }
             .onChange(of: viewmodel.fullscreen) {
                 if viewmodel.fullscreen {
@@ -196,23 +184,6 @@ struct LyricChillerApp: App {
                 }
         }
         .defaultSize(width: NSScreen.mainWidth, height: NSScreen.mainHeight)
-        Window("Set Up LyricChiller", id: "onboarding") {
-            OnboardingWindow().frame(minWidth: 700, maxWidth: 700, minHeight: 600, maxHeight: 600, alignment: .center)
-                .environment(viewmodel)
-                .preferredColorScheme(.dark)
-                .onAppear {
-                    NSApp.setActivationPolicy(.regular)
-                }
-                .onDisappear {
-                    if !viewmodel.fullscreen {
-                        NSApp.setActivationPolicy(.accessory)
-                    }
-                }
-        }
-        .windowResizability(.contentSize)
-        .windowStyle(.hiddenTitleBar)
-        .windowLevel(.floating)
-
         Window("LyricChiller: Searching for \(viewmodel.currentlyPlayingName ?? "-") by \(viewmodel.currentlyPlayingArtist ?? "-")", id: "search") {
             SearchWindow().frame(minWidth: 700, maxWidth: 700, minHeight: 500, maxHeight: 500, alignment: .center)
                 .environment(viewmodel)
@@ -227,27 +198,22 @@ struct LyricChillerApp: App {
                 }
         }
         .windowResizability(.contentSize)
-        Window("LyricChiller: Update 2.3", id: "update") {
-            UpdateWindow().frame(minWidth: 700, maxWidth: 700, alignment: .center)
-                .environment(viewmodel)
-                .preferredColorScheme(.dark)
-                .onAppear {
-                    NSApp.setActivationPolicy(.regular)
-                }
-                .onDisappear {
-                    if !viewmodel.fullscreen {
-                        NSApp.setActivationPolicy(.accessory)
-                    }
-                }
-        }
-            .windowResizability(.contentSize)
-            .windowStyle(.hiddenTitleBar)
-            .windowLevel(.floating)
     }
 }
 
 @MainActor
 final class LyricChillerAppDelegate: NSObject, NSApplicationDelegate {
+    private let initialSettingsPresentedKey = "hasPresentedInitialSettings"
+
+    func applicationDidFinishLaunching(_ notification: Notification) {
+        guard !UserDefaults.standard.bool(forKey: initialSettingsPresentedKey) else { return }
+        UserDefaults.standard.set(true, forKey: initialSettingsPresentedKey)
+
+        DispatchQueue.main.async {
+            LyricChillerSettingsWindowController.shared.open(viewModel: .shared, tab: .playback)
+        }
+    }
+
     func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows: Bool) -> Bool {
         guard !ViewModel.shared.userDefaultStorage.showMenubarIcon else { return false }
         LyricChillerSettingsWindowController.shared.open(viewModel: .shared)

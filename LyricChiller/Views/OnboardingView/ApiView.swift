@@ -138,7 +138,6 @@ struct ApiView: View {
             do {
                 try await ViewModel.shared.spotifyLyricProvider.generateAccessToken()
                 errorMessage = nil
-                ViewModel.shared.userDefaultStorage.hasOnboarded = true
                 if let onComplete {
                     onComplete()
                 } else {
@@ -152,7 +151,6 @@ struct ApiView: View {
     }
 
     func continueWithoutSpotify() {
-        ViewModel.shared.userDefaultStorage.hasOnboarded = true
         if let onComplete {
             onComplete()
         } else {
