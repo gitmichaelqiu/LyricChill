@@ -22,6 +22,7 @@ extension NSScreen {
 @main
 struct LyricChillApp: App {
     @State var viewmodel = ViewModel.shared
+    @AppStorage("showMenubarIcon") private var isMenuBarIconVisible = true
     @NSApplicationDelegateAdaptor(LyricChillAppDelegate.self) private var appDelegate
     @Environment(\.openWindow) var openWindow
     @Environment(\.openURL) var openURL
@@ -29,7 +30,7 @@ struct LyricChillApp: App {
     var body: some Scene {
         @Bindable var viewmodel = viewmodel
 
-        MenuBarExtra(isInserted: $viewmodel.userDefaultStorage.showMenubarIcon) {
+        MenuBarExtra(isInserted: $isMenuBarIconVisible) {
             MenubarWindowView()
                 .environment(viewmodel)
         } label: {
