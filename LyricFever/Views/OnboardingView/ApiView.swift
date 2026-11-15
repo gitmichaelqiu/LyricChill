@@ -11,6 +11,7 @@ import SDWebImageSwiftUI
 struct ApiView: View {
     @Environment(\.dismiss) var dismiss
     var onComplete: (() -> Void)? = nil
+    var isSettingsPresentation = false
     @State private var isShowingDetailView = false
     @AppStorage("spDcCookie") var spDcCookie: String = ""
     @State var isLoading = false
@@ -65,6 +66,11 @@ struct ApiView: View {
                         }
                     }
                 }
+                .frame(
+                    maxWidth: isSettingsPresentation ? .infinity : nil,
+                    minHeight: isSettingsPresentation ? 240 : nil,
+                    maxHeight: isSettingsPresentation ? .infinity : nil
+                )
                 .clipShape(RoundedRectangle(cornerRadius: 20))
             } else {
                 HStack {
@@ -116,6 +122,11 @@ struct ApiView: View {
             
         }
         .padding(.horizontal, 20)
+        .frame(
+            maxWidth: isSettingsPresentation ? .infinity : nil,
+            maxHeight: isSettingsPresentation ? .infinity : nil,
+            alignment: .topLeading
+        )
         .navigationBarBackButtonHidden(true)
         .onReceive(NotificationCenter.default.publisher(for: Notification.Name("didLogIn"))) { newValue in
             loggedIn = true

@@ -43,10 +43,12 @@ struct LyricChillLyricsSettingsView: View {
         .frame(maxWidth: .infinity, alignment: .topLeading)
         .sheet(isPresented: $showingSpotifyConnection) {
             NavigationStack {
-                ApiView(onComplete: { showingSpotifyConnection = false })
+                ApiView(
+                    onComplete: { showingSpotifyConnection = false },
+                    isSettingsPresentation: true
+                )
             }
-            .frame(minWidth: 720, minHeight: 560)
-            .preferredColorScheme(.dark)
+            .frame(width: 640, height: 480)
         }
     }
 }
