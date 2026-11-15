@@ -21,6 +21,7 @@ struct GlobalKeyboardShortcutsView: View {
 private enum LyricChillShortcut: String, CaseIterable, Identifiable {
     case karaoke
     case lyrics
+    case menuBarWidget
     case translate
     case romanize
     case fullscreen
@@ -33,6 +34,7 @@ private enum LyricChillShortcut: String, CaseIterable, Identifiable {
         switch self {
         case .karaoke: "Toggle karaoke window"
         case .lyrics: "Toggle menu bar lyrics"
+        case .menuBarWidget: "Open menu bar controls"
         case .translate: "Toggle translations"
         case .romanize: "Toggle romanization"
         case .fullscreen: "Open fullscreen lyrics"
@@ -43,6 +45,7 @@ private enum LyricChillShortcut: String, CaseIterable, Identifiable {
         switch self {
         case .karaoke: ["lyrics", "overlay"]
         case .lyrics: ["show", "hide"]
+        case .menuBarWidget: ["menu", "widget", "show", "open"]
         case .translate: ["translation"]
         case .romanize: ["romanization"]
         case .fullscreen: ["fullscreen", "karaoke"]

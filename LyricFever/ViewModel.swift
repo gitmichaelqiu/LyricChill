@@ -30,6 +30,7 @@ import MediaRemoteAdapter
     var currentlyPlaying: String?
     
     var currentVolume: Int?
+    var isMenuBarWidgetPresented = false
     var isStopped = false
     
     var artworkImage: NSImage?
@@ -371,6 +372,11 @@ import MediaRemoteAdapter
         }
         #if os(macOS)
         migrateTimestampsIfNeeded(context: coreDataContainer.viewContext)
+
+        KeyboardShortcuts.onKeyUp(for: .init("menuBarWidget")) { [self] in
+            guard userDefaultStorage.showMenubarIcon else { return }
+            isMenuBarWidgetPresented = true
+        }
         
         
         // Check if user must urgently update (overrides menubar)

@@ -8,6 +8,7 @@
 import SwiftUI
 import Translation
 import LaunchAtLogin
+import MenuBarExtraAccess
 
 extension NSScreen {
     static var mainWidth: CGFloat {
@@ -21,11 +22,14 @@ extension NSScreen {
 @main
 struct LyricChillApp: App {
     @State var viewmodel = ViewModel.shared
+    @NSApplicationDelegateAdaptor(LyricChillAppDelegate.self) private var appDelegate
     @Environment(\.openWindow) var openWindow
     @Environment(\.openURL) var openURL
     
     var body: some Scene {
-        MenuBarExtra {
+        @Bindable var viewmodel = viewmodel
+
+        MenuBarExtra(isInserted: $viewmodel.userDefaultStorage.showMenubarIcon) {
             MenubarWindowView()
                 .environment(viewmodel)
         } label: {
@@ -180,6 +184,7 @@ struct LyricChillApp: App {
                 }
             }
         }
+        .menuBarExtraAccess(isPresented: $viewmodel.isMenuBarWidgetPresented)
         .menuBarExtraStyle(.window)
         Window("LyricChill: Fullscreen", id: "fullscreen") {
             FullscreenView()
@@ -255,6 +260,15 @@ struct LyricChillApp: App {
             .windowResizability(.contentSize)
             .windowStyle(.hiddenTitleBar)
             .windowLevel(.floating)
+    }
+}
+
+@MainActor
+final class LyricChillAppDelegate: NSObject, NSApplicationDelegate {
+    func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows: Bool) -> Bool {
+        guard !ViewModel.shared.userDefaultStorage.showMenubarIcon else { return false }
+        LyricChillSettingsWindowController.shared.open(viewModel: .shared)
+        return true
     }
 }
 

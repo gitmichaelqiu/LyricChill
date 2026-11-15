@@ -9,38 +9,54 @@ struct LyricChillGeneralSettingsView: View {
         @Bindable var viewModel = viewModel
 
         VStack(alignment: .leading, spacing: 20) {
-            ModularSettingsSection("General") {
+            ModularSettingsSection("Menu Bar") {
+                ModularSettingsRow(
+                    "Show menu bar icon",
+                    helperText: "Show the LyricChill menu bar icon and controls.",
+                    keywords: ["icon", "status item", "controls"]
+                ) {
+                    Toggle("Show menu bar icon", isOn: $viewModel.userDefaultStorage.showMenubarIcon)
+                        .labelsHidden()
+                        .toggleStyle(.switch)
+                }
+
+                if viewModel.userDefaultStorage.showMenubarIcon {
+                    Divider()
+
+                    ModularSettingsRow(
+                        "Show song details in menu bar",
+                        helperText: "When menu bar lyrics are hidden or unavailable, show the current song title and artist.",
+                        keywords: ["title", "artist", "display"]
+                    ) {
+                        Toggle("Show song details in menu bar", isOn: $viewModel.userDefaultStorage.showSongDetailsInMenubar)
+                            .labelsHidden()
+                            .toggleStyle(.switch)
+                    }
+
+                    if viewModel.userDefaultStorage.showSongDetailsInMenubar {
+                        Divider()
+
+                        ModularSettingsRow(
+                            "Menu bar lyric length",
+                            helperText: "Choose the maximum number of characters shown in the menu bar.",
+                            keywords: ["truncation", "characters", "display"]
+                        ) {
+                            Picker("", selection: $truncationLength) {
+                                ForEach([30, 40, 50, 60], id: \.self) { length in
+                                    Text("\(length) characters").tag(length)
+                                }
+                            }
+                            .labelsHidden()
+                        }
+                    }
+                }
+            }
+
+            ModularSettingsSection("System") {
                 ModularSettingsRow("Launch at login", keywords: ["startup", "launch"]) {
                     LaunchAtLogin.Toggle("")
                         .labelsHidden()
                         .toggleStyle(.switch)
-                }
-
-                Divider()
-
-                ModularSettingsRow(
-                    "Show song details in menu bar",
-                    helperText: "Show the current song title and artist in the menu bar.",
-                    keywords: ["title", "artist", "display"]
-                ) {
-                    Toggle("Show song details in menu bar", isOn: $viewModel.userDefaultStorage.showSongDetailsInMenubar)
-                        .labelsHidden()
-                        .toggleStyle(.switch)
-                }
-            }
-
-            ModularSettingsSection("Menu Bar") {
-                ModularSettingsRow(
-                    "Menu bar lyric length",
-                    helperText: "Choose the maximum number of characters shown in the menu bar.",
-                    keywords: ["truncation", "characters", "display"]
-                ) {
-                    Picker("", selection: $truncationLength) {
-                        ForEach([30, 40, 50, 60], id: \.self) { length in
-                            Text("\(length) characters").tag(length)
-                        }
-                    }
-                    .labelsHidden()
                 }
             }
 
