@@ -5,7 +5,6 @@ enum LyricChillSettingsTab: String, CaseIterable, Identifiable {
     case playback
     case lyrics
     case karaoke
-    case menuBar
     case shortcuts
     case about
 
@@ -17,7 +16,6 @@ enum LyricChillSettingsTab: String, CaseIterable, Identifiable {
         case .playback: "Playback"
         case .lyrics: "Lyrics"
         case .karaoke: "Karaoke"
-        case .menuBar: "Menu Bar"
         case .shortcuts: "Shortcuts"
         case .about: "About"
         }
@@ -29,7 +27,6 @@ enum LyricChillSettingsTab: String, CaseIterable, Identifiable {
         case .playback: "music.note"
         case .lyrics: "text.alignleft"
         case .karaoke: "quote.bubble"
-        case .menuBar: "menubar.rectangle"
         case .shortcuts: "keyboard"
         case .about: "info.circle"
         }
@@ -84,9 +81,6 @@ struct LyricChillSettingsView: View {
                     KaraokeSettingsView()
                         .environment(viewModel)
                         .environment(\.modularSettingsTab, LyricChillSettingsTab.karaoke.modularTab)
-                    LyricChillMenuBarSettingsView()
-                        .environment(viewModel)
-                        .environment(\.modularSettingsTab, LyricChillSettingsTab.menuBar.modularTab)
                     GlobalKeyboardShortcutsView()
                         .environment(\.modularSettingsTab, LyricChillSettingsTab.shortcuts.modularTab)
                     LyricChillAboutSettingsView()
@@ -343,10 +337,6 @@ struct LyricChillSettingsView: View {
         case .karaoke:
             ModularSettingsContainer(tab.modularTab) {
                 KaraokeSettingsView().environment(viewModel)
-            }
-        case .menuBar:
-            ModularSettingsContainer(tab.modularTab) {
-                LyricChillMenuBarSettingsView().environment(viewModel)
             }
         case .shortcuts:
             ModularSettingsContainer(tab.modularTab) {

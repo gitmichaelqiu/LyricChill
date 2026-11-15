@@ -3,14 +3,44 @@ import SwiftUI
 
 struct LyricChillGeneralSettingsView: View {
     @Environment(ViewModel.self) private var viewModel
+    @AppStorage("truncationLength") private var truncationLength = 40
 
     var body: some View {
+        @Bindable var viewModel = viewModel
+
         VStack(alignment: .leading, spacing: 20) {
             ModularSettingsSection("General") {
                 ModularSettingsRow("Launch at login", keywords: ["startup", "launch"]) {
                     LaunchAtLogin.Toggle("")
                         .labelsHidden()
                         .toggleStyle(.switch)
+                }
+
+                Divider()
+
+                ModularSettingsRow(
+                    "Show song details in menu bar",
+                    helperText: "Show the current song title and artist in the menu bar.",
+                    keywords: ["title", "artist", "display"]
+                ) {
+                    Toggle("Show song details in menu bar", isOn: $viewModel.userDefaultStorage.showSongDetailsInMenubar)
+                        .labelsHidden()
+                        .toggleStyle(.switch)
+                }
+            }
+
+            ModularSettingsSection("Menu Bar") {
+                ModularSettingsRow(
+                    "Menu bar lyric length",
+                    helperText: "Choose the maximum number of characters shown in the menu bar.",
+                    keywords: ["truncation", "characters", "display"]
+                ) {
+                    Picker("", selection: $truncationLength) {
+                        ForEach([30, 40, 50, 60], id: \.self) { length in
+                            Text("\(length) characters").tag(length)
+                        }
+                    }
+                    .labelsHidden()
                 }
             }
 
