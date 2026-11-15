@@ -16,7 +16,6 @@ struct LyricChillerPlaybackSettingsView: View {
             ModularSettingsSection("Playback") {
                 ModularSettingsRow(
                     "Music app",
-                    helperText: "Choose the app LyricChiller reads playback information from.",
                     keywords: ["Spotify", "Apple Music", "player"]
                 ) {
                     MusicAppPicker(selection: $spotifyOrAppleMusic)
