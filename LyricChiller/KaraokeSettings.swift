@@ -25,7 +25,6 @@ struct KaraokeSettingsView: View {
             ModularSettingsSection("Behavior") {
                 ModularSettingsRow(
                     "Hide when the pointer enters the window",
-                    helperText: "Temporarily hides the karaoke window while the pointer is over it.",
                     keywords: ["hover", "mouse"]
                 ) {
                     Toggle("Hide when the pointer enters the window", isOn: $karaokeModeHoveringSetting)
@@ -68,7 +67,6 @@ struct KaraokeSettingsView: View {
 
                 ModularSettingsSliderRow(
                     "Background opacity",
-                    helperText: "Adjust how strongly the karaoke background shows through.",
                     value: $karaokeTransparency,
                     range: 0.0...100.0,
                     defaultValue: 50.0,

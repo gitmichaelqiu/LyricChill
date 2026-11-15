@@ -59,7 +59,6 @@ struct LyricChillerGeneralSettingsView: View {
 
                                 ModularSettingsRow(
                                     "Menu bar lyric length",
-                                    helperText: "Choose the maximum number of characters shown in the menu bar.",
                                     keywords: ["truncation", "characters", "display"]
                                 ) {
                                     Picker("", selection: $truncationLength) {
@@ -99,7 +98,6 @@ struct LyricChillerGeneralSettingsView: View {
             ModularSettingsSection("Advanced") {
                 ModularSettingsRow(
                     "Review onboarding",
-                    helperText: "Reopen the setup walkthrough for your music app and lyric source.",
                     keywords: ["setup", "welcome", "walkthrough"]
                 ) {
                     Button("Review") {
