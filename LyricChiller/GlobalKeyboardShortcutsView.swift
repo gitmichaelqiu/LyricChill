@@ -5,12 +5,14 @@ import SwiftUI
 struct GlobalKeyboardShortcutsView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
-            ModularSettingsSection("Global keyboard shortcuts") {
-                ForEach(LyricChillerShortcut.allCases) { shortcut in
-                    if shortcut != .karaoke {
-                        Divider()
+            ForEach(LyricChillerShortcutGroup.allCases) { group in
+                ModularSettingsSection(group.title) {
+                    ForEach(group.shortcuts) { shortcut in
+                        if shortcut != group.shortcuts.first {
+                            Divider()
+                        }
+                        LyricChillerShortcutRow(shortcut: shortcut)
                     }
-                    LyricChillerShortcutRow(shortcut: shortcut)
                 }
             }
         }
@@ -18,7 +20,31 @@ struct GlobalKeyboardShortcutsView: View {
     }
 }
 
-private enum LyricChillerShortcut: String, CaseIterable, Identifiable {
+private enum LyricChillerShortcutGroup: String, CaseIterable, Identifiable {
+    case windows
+    case menuBar
+    case lyrics
+
+    var id: String { rawValue }
+
+    var title: LocalizedStringKey {
+        switch self {
+        case .windows: "Windows"
+        case .menuBar: "Menu Bar"
+        case .lyrics: "Lyrics"
+        }
+    }
+
+    var shortcuts: [LyricChillerShortcut] {
+        switch self {
+        case .windows: [.karaoke, .fullscreen]
+        case .menuBar: [.menuBarWidget, .lyrics]
+        case .lyrics: [.translate, .romanize]
+        }
+    }
+}
+
+private enum LyricChillerShortcut: String, CaseIterable, Identifiable, Equatable {
     case karaoke
     case lyrics
     case menuBarWidget
