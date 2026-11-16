@@ -61,7 +61,7 @@ struct LyricChillerApp: App {
                     viewmodel.stopLyricUpdater()
                 }
             }
-            .floatingPanel(isPresented: $viewmodel.displayKaraoke) {
+            .floatingPanel(isPresented: $viewmodel.isKaraokeWindowPresented) {
                 KaraokeView()
                     .animation(.easeIn(duration: 0.2))
                     .environment(viewmodel)

@@ -57,7 +57,11 @@ struct KaraokeView: View {
                 Text(verbatim: currentWords(for: currentlyPlayingLyricsIndex))
             }
         } else {
-            Text("")
+            if viewmodel.currentlyPlayingName == nil {
+                Text("No music playing")
+            } else {
+                Text("Lyrics will appear here")
+            }
         }
     }
 

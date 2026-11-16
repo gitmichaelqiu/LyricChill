@@ -254,6 +254,21 @@ import MediaRemoteAdapter
         }
     }
 
+    var isKaraokeWindowPresented: Bool {
+        get {
+            (displayKaraoke || karaokeWindowManuallyPresented) && !karaokeModeHovering
+        }
+        set {
+            karaokeWindowManuallyPresented = newValue && !displayKaraoke
+        }
+    }
+
+    func toggleKaraokeWindow() {
+        let shouldPresent = !isKaraokeWindowPresented
+        userDefaultStorage.karaoke = shouldPresent
+        karaokeWindowManuallyPresented = shouldPresent && !displayKaraoke
+    }
+
     private var currentLyricIsNotBlank: Bool {
         guard let index = currentlyPlayingLyricsIndex, index < currentlyPlayingLyrics.count else { return false }
         return !currentlyPlayingLyrics[index].words.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
@@ -345,6 +360,7 @@ import MediaRemoteAdapter
     #if os(macOS)
     // UI element used to hide if karaokeModeHoveringSetting is true
     var karaokeModeHovering: Bool = false
+    var karaokeWindowManuallyPresented = false
     
     #endif
     

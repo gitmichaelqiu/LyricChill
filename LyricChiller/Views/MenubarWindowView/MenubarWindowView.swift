@@ -190,11 +190,7 @@ struct MenubarWindowView: View {
     }
     
     var displayLyrics: ButtonState {
-        if !viewmodel.userDefaultStorage.hasOnboarded {
-            return .disabled
-        } else if viewmodel.lyricsIsEmptyPostLoad {
-            return .disabled
-        } else if viewmodel.showLyrics {
+        if viewmodel.showLyrics {
             return .enabled
         } else {
             return .clickable
@@ -215,7 +211,7 @@ struct MenubarWindowView: View {
     }
 
     private var karaokeControlHighlight: MenubarButtonHighlight {
-        switch displayKaraoke {
+        switch karaokeWindowButtonState {
         case .enabled:
             .hideKaraokeWindow
         case .disabled:
@@ -225,6 +221,10 @@ struct MenubarWindowView: View {
         default:
             .none
         }
+    }
+
+    private var karaokeWindowButtonState: ButtonState {
+        viewmodel.isKaraokeWindowPresented ? .enabled : .clickable
     }
     
     
@@ -247,8 +247,8 @@ struct MenubarWindowView: View {
                 currentHoveredItem = isHovering ? .enableFullscreen : .none
             }
 //            .foregroundStyle(.white)
-            MenubarButton(buttonText: "", imageText: "dock.rectangle", buttonState: displayKaraoke) {
-                viewmodel.userDefaultStorage.karaoke.toggle()
+            MenubarButton(buttonText: "", imageText: "dock.rectangle", buttonState: karaokeWindowButtonState) {
+                viewmodel.toggleKaraokeWindow()
             }
             .accessibilityLabel(karaokeControlHighlight.description)
             .help(karaokeControlHighlight.description)
@@ -272,7 +272,6 @@ struct MenubarWindowView: View {
             }
             
             Toggle("Translate To \(viewmodel.userLocaleLanguageString)", isOn: $viewmodel.userDefaultStorage.translate)
-            .disabled(!viewmodel.userDefaultStorage.hasOnboarded)
             Divider()
         }
         let translationSourceLanguagePickerBinding = Binding<String?> (
@@ -318,6 +317,7 @@ struct MenubarWindowView: View {
                     Text(Locale.current.localizedString(forIdentifier: language.minimalIdentifier) ?? language.maximalIdentifier).tag(language.maximalIdentifier)
                 }
             }
+            .disabled(viewmodel.currentlyPlaying == nil)
         }
 //        .onChange(of: viewmodel.translationSourceLanguage) {
 //        }
@@ -342,23 +342,7 @@ struct MenubarWindowView: View {
     }
     
     var displayFullscreen: ButtonState {
-        if !viewmodel.userDefaultStorage.hasOnboarded {
-            return .disabled
-        } else if viewmodel.displayFullscreen {
-            return .enabled
-        } else {
-            return .clickable
-        }
-    }
-    
-    var displayKaraoke: ButtonState {
-        guard viewmodel.userDefaultStorage.hasOnboarded else {
-            return .disabled
-        }
-        guard !viewmodel.lyricsIsEmptyPostLoad else {
-            return .disabled
-        }
-        if viewmodel.userDefaultStorage.karaoke {
+        if viewmodel.displayFullscreen {
             return .enabled
         } else {
             return .clickable
@@ -366,7 +350,8 @@ struct MenubarWindowView: View {
     }
     
     var refreshState: ButtonState {
-        guard viewmodel.userDefaultStorage.hasOnboarded else {
+        guard viewmodel.userDefaultStorage.hasOnboarded,
+              viewmodel.currentlyPlaying != nil else {
             return .disabled
         }
         if viewmodel.isFetching {
@@ -377,16 +362,12 @@ struct MenubarWindowView: View {
     }
     
     var translationState: ButtonState {
-        guard viewmodel.userDefaultStorage.hasOnboarded else {
-            return .disabled
-        }
-        guard !viewmodel.lyricsIsEmptyPostLoad else {
-            return .disabled
-        }
         if viewmodel.userDefaultStorage.translate {
             if viewmodel.isFetchingTranslation {
                 return .loading
             } else if viewmodel.translationExists {
+                return .enabled
+            } else if !hasCurrentTrack {
                 return .enabled
             } else {
                 return .missing
@@ -399,14 +380,13 @@ struct MenubarWindowView: View {
     }
     
     var searchState: ButtonState {
-        guard viewmodel.userDefaultStorage.hasOnboarded else {
-            return .disabled
-        }
         return .clickable
     }
     
     var deleteOrUploadState: ButtonState {
-        guard viewmodel.userDefaultStorage.hasOnboarded else {
+        guard viewmodel.userDefaultStorage.hasOnboarded,
+              viewmodel.currentlyPlaying != nil,
+              viewmodel.currentlyPlayingName != nil else {
             return .disabled
         }
         // attach a separate disabled modifier to prevent slash flashing
@@ -559,7 +539,7 @@ struct MenubarWindowView: View {
     
     var volumeBinding: Binding<Double> {
         Binding(
-            get: { Double(viewmodel.currentVolume ?? 0) },
+            get: { Double(viewmodel.currentVolume ?? 50) },
             set: { newValue in
                 guard viewmodel.isPlayerRunning else { return }
                 viewmodel.currentPlayerInstance.setVolume(to: newValue)
@@ -599,7 +579,7 @@ struct MenubarWindowView: View {
                 .frame(minWidth: 50, alignment: .trailing)
         }
         .tint(sliderTint)
-        .disabled(!viewmodel.isPlayerRunning || viewmodel.currentVolume == nil)
+        .disabled(!viewmodel.isPlayerRunning)
     }
     
     var body: some View {

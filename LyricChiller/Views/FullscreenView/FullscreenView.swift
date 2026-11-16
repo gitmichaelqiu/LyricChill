@@ -87,7 +87,6 @@ struct FullscreenView: View {
             }
             .keyboardShortcut("h")
             #endif
-            .disabled(viewmodel.currentlyPlayingLyrics.isEmpty)
 
             Button {
                 viewmodel.userDefaultStorage.translate.toggle()
@@ -101,7 +100,6 @@ struct FullscreenView: View {
             }
             .keyboardShortcut("t")
             #endif
-            .disabled(viewmodel.currentlyPlayingLyrics.isEmpty)
 
 
 
@@ -257,8 +255,18 @@ struct FullscreenView: View {
             // ProgressView sits on top and fades out once lyrics are ready,
             // revealing the already-positioned scroll view underneath.
             if lyricsEmpty {
-                ProgressView()
-                    .transition(.opacity)
+                if viewmodel.isFetching {
+                    ProgressView()
+                        .transition(.opacity)
+                } else if viewmodel.currentlyPlayingName == nil {
+                    Text("No music playing")
+                        .foregroundStyle(.secondary)
+                        .transition(.opacity)
+                } else {
+                    Text("Lyrics not available")
+                        .foregroundStyle(.secondary)
+                        .transition(.opacity)
+                }
             }
         }
         .animation(.easeOut(duration: 0.6), value: lyricsEmpty)
