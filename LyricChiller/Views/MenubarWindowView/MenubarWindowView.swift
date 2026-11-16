@@ -29,6 +29,10 @@ struct MenubarWindowView: View {
         viewmodel.currentBackground == nil ? .accentColor : .white
     }
 
+    private var playbackProgressColor: Color {
+        viewmodel.currentBackground == nil ? .primary : .white
+    }
+
     private func formattedPlaybackTime(_ milliseconds: TimeInterval?) -> String {
         guard let milliseconds, milliseconds.isFinite, milliseconds >= 0 else {
             return "--:--"
@@ -170,7 +174,7 @@ struct MenubarWindowView: View {
                         value: min(max(currentTime ?? 0, 0), duration),
                         total: duration
                     )
-                        .progressViewStyle(ColoredThinProgressViewStyle(color: .secondary, thickness: 4))
+                        .progressViewStyle(ColoredThinProgressViewStyle(color: playbackProgressColor, thickness: 4))
                         .frame(height: 4)
                         .padding(.horizontal, 4)
 
@@ -551,7 +555,7 @@ struct MenubarWindowView: View {
     @ViewBuilder
     var volumeSlider: some View {
         @Bindable var viewmodel = viewmodel
-        HStack {
+        HStack(alignment: .center, spacing: 8) {
             Group {
                 if let currentVolume = viewmodel.currentVolume {
                     Image(systemName: "speaker.wave.3", variableValue: Double(currentVolume) / 100)
@@ -559,7 +563,7 @@ struct MenubarWindowView: View {
                     Image(systemName: "speaker.wave.2")
                 }
             }
-            .frame(width: 30)
+            .frame(width: 30, height: 28, alignment: .center)
             if #available(macOS 26.0, *) {
                 Slider(value: volumeBinding, in: 0...100) {
                     Text("Volume")
@@ -568,16 +572,22 @@ struct MenubarWindowView: View {
                 }
                 .labelsHidden()
                 .frame(width: 160)
+                .frame(height: 28, alignment: .center)
+                .offset(y: 2)
             } else {
                 Slider(value: volumeBinding, in: 0...100) {
                     Text("Volume")
                 }
                 .labelsHidden()
                 .frame(width: 160)
+                .frame(height: 28, alignment: .center)
+                .offset(y: 2)
             }
             ModularSettingsAnimatedValue(text: viewmodel.currentVolume.map(String.init) ?? "—")
                 .frame(minWidth: 50, alignment: .trailing)
+                .frame(height: 28, alignment: .center)
         }
+        .frame(height: 28, alignment: .center)
         .tint(sliderTint)
         .disabled(!viewmodel.isPlayerRunning)
     }
