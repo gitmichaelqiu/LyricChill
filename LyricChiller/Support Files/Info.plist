@@ -21,7 +21,7 @@
 	<key>SUEnableInstallerLauncherService</key>
 	<true/>
 	<key>SUFeedURL</key>
-	<string>https://aviwad.github.io/SpotifyLyricsInMenubar/appcast.xml</string>
+	<string>https://raw.githubusercontent.com/gitmichaelqiu/LyricChiller/main/appcast.xml</string>
 	<key>SUPublicEDKey</key>
 	<string>FSX9uBGItlJwhydb/y9bFiAoZKFy1YaTjgiR/0bcVbI=</string>
 	<key>UTExportedTypeDeclarations</key>
