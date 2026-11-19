@@ -59,8 +59,10 @@ struct KaraokeView: View {
         } else {
             if viewmodel.currentlyPlayingName == nil {
                 Text("No music playing")
-            } else {
+            } else if !viewmodel.currentlyPlayingLyrics.isEmpty || viewmodel.isFetching {
                 Text("Lyrics will appear here")
+            } else {
+                EmptyView()
             }
         }
     }
