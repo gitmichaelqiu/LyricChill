@@ -22,8 +22,8 @@
         <attribute name="downloadDate" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="id" attributeType="String"/>
         <attribute name="language" optional="YES" attributeType="String"/>
-        <attribute name="lyricsTimestamps" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromDataTransformer" customClassName="[TimeInterval]"/>
-        <attribute name="lyricsWords" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromDataTransformer" customClassName="[String]"/>
+        <attribute name="lyricsTimestamps" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromDataTransformer" customClassName="NSArray"/>
+        <attribute name="lyricsWords" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromDataTransformer" customClassName="NSArray"/>
         <attribute name="title" attributeType="String"/>
         <uniquenessConstraints>
             <uniquenessConstraint>
