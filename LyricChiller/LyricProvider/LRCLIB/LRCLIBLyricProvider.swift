@@ -33,24 +33,48 @@ class LRCLIBLyricProvider: LyricProvider {
         }
         print("LRCLIB /api/get: \(url.absoluteString)")
         let req = URLRequest(url: url)
-        let urlResponseAndData = try await LRCLIBUserAgentSession.data(for: req)
-        let lrcLyrics = try JSONDecoder().decode(LRCLIBLyrics.self, from: urlResponseAndData.0)
-        return NetworkFetchReturn(lyrics: lrcLyrics.lyrics, colorData: nil)
+        var exactMatch: LRCLIBLyrics?
+        do {
+            let (data, response) = try await LRCLIBUserAgentSession.data(for: req)
+            if let response = response as? HTTPURLResponse, (200..<300).contains(response.statusCode) {
+                exactMatch = try JSONDecoder().decode(LRCLIBLyrics.self, from: data)
+            } else {
+                print("LRCLIB /api/get returned a non-success response")
+            }
+        } catch {
+            print("LRCLIB /api/get failed: \(error)")
+        }
+
+        if let exactMatch, !exactMatch.lyrics.isEmpty {
+            return NetworkFetchReturn(lyrics: exactMatch.lyrics, colorData: nil)
+        }
+
+        if exactMatch?.plainLyrics?.isEmpty == false {
+            print("LRCLIB exact match has plain lyrics only; searching for a synced version")
+        }
+
+        let searchResults = try await fetchSearchResults(trackName: trackName, artistName: currentlyPlayingArtist)
+        guard let syncedMatch = bestSyncedMatch(
+            in: searchResults,
+            trackName: trackName,
+            artistName: currentlyPlayingArtist,
+            albumName: currentAlbumName,
+            duration: exactMatch?.duration
+        ) else {
+            return NetworkFetchReturn(lyrics: [], colorData: nil)
+        }
+
+        print("LRCLIB: found a matching synced lyric record (\(syncedMatch.trackName), \(syncedMatch.albumName))")
+        return NetworkFetchReturn(lyrics: syncedMatch.lyrics, colorData: nil)
     }
     
     func fetchNetworkLyrics2(trackName: String, trackID: String, currentlyPlayingArtist: String?, currentAlbumName: String?) async throws -> NetworkFetchReturn {
-        let artist = currentlyPlayingArtist?.replacingOccurrences(of: "&", with: "")
-        let album = currentAlbumName?.replacingOccurrences(of: "&", with: "")
-        let trackName = trackName.replacingOccurrences(of: "&", with: "")
-        if let artist = artist, let album = album, let url = URL(string: "https://lrclib.net/api/get?artist_name=\(artist)&track_name=\(trackName)&album_name=\(album)") {
-            print("the lrclib call is \(url.absoluteString)")
-            let request = URLRequest(url: url)
-            let urlResponseAndData = try await LRCLIBUserAgentSession.data(for: request)
-            print(String(describing: urlResponseAndData.0))
-            let lrcLyrics = try JSONDecoder().decode(LRCLIBLyrics.self, from: urlResponseAndData.0)
-            return NetworkFetchReturn(lyrics: lrcLyrics.lyrics, colorData: nil)
-        }
-        return NetworkFetchReturn(lyrics: [], colorData: nil)
+        try await fetchNetworkLyrics(
+            trackName: trackName,
+            trackID: trackID,
+            currentlyPlayingArtist: currentlyPlayingArtist,
+            currentAlbumName: currentAlbumName
+        )
     }
     
     func search(trackName: String, artistName: String) async throws -> [SongResult] {
@@ -82,5 +106,74 @@ class LRCLIBLyricProvider: LyricProvider {
         comps.path = path
         comps.queryItems = items
         return comps
+    }
+
+    private func fetchSearchResults(trackName: String, artistName: String) async throws -> [LRCLIBLyrics] {
+        guard let url = makeComponents(path: "/api/search", items: [
+            URLQueryItem(name: "track_name", value: trackName),
+            URLQueryItem(name: "artist_name", value: artistName)
+        ]).url else {
+            return []
+        }
+
+        let (data, response) = try await LRCLIBUserAgentSession.data(for: URLRequest(url: url))
+        guard let response = response as? HTTPURLResponse, (200..<300).contains(response.statusCode) else {
+            print("LRCLIB /api/search returned a non-success response")
+            return []
+        }
+
+        return try JSONDecoder().decode(PluralLRCLIBLyrics.self, from: data).lyrics
+    }
+
+    private func bestSyncedMatch(
+        in results: [LRCLIBLyrics],
+        trackName: String,
+        artistName: String,
+        albumName: String,
+        duration: Double?
+    ) -> LRCLIBLyrics? {
+        let normalizedTrackName = normalizedMetadata(trackName)
+        let normalizedArtistName = normalizedMetadata(artistName)
+
+        let eligibleResults = results.filter { result in
+            let resultTrackName = result.trackName.replacingOccurrences(
+                of: #"\s*\(Paused\)$"#,
+                with: "",
+                options: [.regularExpression, .caseInsensitive]
+            )
+
+            guard normalizedMetadata(resultTrackName) == normalizedTrackName,
+                  normalizedMetadata(result.artistName) == normalizedArtistName,
+                  !result.lyrics.isEmpty else {
+                return false
+            }
+
+            guard let duration else { return true }
+            return abs(result.duration - duration) <= 15
+        }
+
+        return eligibleResults.min { left, right in
+            let leftAlbumMatches = normalizedMetadata(left.albumName) == normalizedMetadata(albumName)
+            let rightAlbumMatches = normalizedMetadata(right.albumName) == normalizedMetadata(albumName)
+            if leftAlbumMatches != rightAlbumMatches {
+                return leftAlbumMatches
+            }
+
+            if let duration {
+                let leftDurationDifference = abs(left.duration - duration)
+                let rightDurationDifference = abs(right.duration - duration)
+                if leftDurationDifference != rightDurationDifference {
+                    return leftDurationDifference < rightDurationDifference
+                }
+            }
+
+            return normalizedMetadata(left.trackName) == normalizedTrackName
+                && normalizedMetadata(right.trackName) != normalizedTrackName
+        }
+    }
+
+    private func normalizedMetadata(_ value: String) -> String {
+        let folded = value.folding(options: [.caseInsensitive, .diacriticInsensitive], locale: Locale(identifier: "en_US_POSIX"))
+        return String(folded.filter { $0.isLetter || $0.isNumber })
     }
 }
